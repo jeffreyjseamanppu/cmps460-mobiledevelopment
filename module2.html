@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Module 2 - Introduction to React Native and TypeScript" />
+  <title>Module 2 | React Native & TypeScript</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #123b63;
+      --primary-2: #1d5f96;
+      --accent: #d97706;
+      --border: #dbe3ec;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --success-bg: #ecfdf5;
+      --success-border: #10b981;
+      --warning-bg: #fffbeb;
+      --warning-border: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      padding: 3.5rem 1.25rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+    }
+
+    header p {
+      margin: 0 auto;
+      max-width: 800px;
+      font-size: 1.15rem;
+      opacity: 0.95;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    nav .nav-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 0.75rem 1rem;
+    }
+
+    nav a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      padding: 0.55rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    nav a:hover {
+      background: #eef5fb;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem 4rem;
+    }
+
+    section {
+      background: var(--surface);
+      margin-bottom: 2rem;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.04);
+    }
+
+    h2 {
+      color: var(--primary);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+    }
+
+    h3 {
+      color: var(--primary-2);
+      margin-top: 2rem;
+    }
+
+    h4 {
+      margin-bottom: 0.4rem;
+    }
+
+    ul, ol {
+      padding-left: 1.4rem;
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      background: #fbfdff;
+    }
+
+    .callout {
+      border-left: 5px solid var(--primary-2);
+      background: #eef6fc;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0;
+      border-radius: 8px;
+    }
+
+    .success {
+      border-left-color: var(--success-border);
+      background: var(--success-bg);
+    }
+
+    .warning {
+      border-left-color: var(--warning-border);
+      background: var(--warning-bg);
+    }
+
+    code {
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .inline-code {
+      background: #edf2f7;
+      color: #1f2937;
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eef5fb;
+      color: var(--primary);
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li::before {
+      content: "☐";
+      margin-right: 0.6rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+    }
+
+    .top-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--primary-2);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    @media (max-width: 700px) {
+      section {
+        padding: 1.25rem;
+      }
+
+      nav {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body id="top">
+
+<header>
+  <h1>Module 2</h1>
+  <p>Introduction to React Native & TypeScript</p>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#overview">Overview</a>
+    <a href="#objectives">Objectives</a>
+    <a href="#lecture">Lecture</a>
+    <a href="#lab">Lab</a>
+    <a href="#assignment">Assignment</a>
+    <a href="#rubric">Rubric</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="overview">
+    <h2>Module Overview</h2>
+
+    <p>
+      In Module 1, you installed and configured the tools required for mobile
+      application development. In Module 2, you will begin writing code and
+      creating your first React Native application.
+    </p>
+
+    <p>
+      The focus of this module is understanding how a React Native application
+      is structured and how TypeScript, TSX, components, views, text, and
+      styles work together to create a mobile user interface.
+    </p>
+
+    <div class="callout">
+      <strong>This week's goal:</strong> Build and run your first React Native
+      interface in the Android Emulator.
+    </div>
+  </section>
+
+  <section id="objectives">
+    <h2>Learning Objectives</h2>
+
+    <p>Upon successful completion of this module, you should be able to:</p>
+
+    <ul>
+      <li>Explain the purpose of React Native.</li>
+      <li>Describe how React Native differs from traditional web development.</li>
+      <li>Identify the major files and folders in a React Native project.</li>
+      <li>Explain the purpose of TypeScript and <span class="inline-code">.tsx</span> files.</li>
+      <li>Understand basic JSX/TSX syntax.</li>
+      <li>Create a functional React Native component.</li>
+      <li>Use <span class="inline-code">View</span>, <span class="inline-code">Text</span>, and <span class="inline-code">StyleSheet</span>.</li>
+      <li>Create reusable custom components.</li>
+      <li>Apply basic styling to a mobile interface.</li>
+      <li>Build and run an application using the Android Emulator.</li>
+      <li>Identify and troubleshoot basic React Native errors.</li>
+    </ul>
+  </section>
+
+  <section id="lecture">
+    <h2>Lecture: Building Your First React Native Application</h2>
+
+    <h3>1. What Is React Native?</h3>
+
+    <p>
+      React Native is a framework for creating mobile applications using
+      JavaScript or TypeScript and React concepts. It allows developers to
+      create applications for multiple platforms while sharing much of the
+      same code.
+    </p>
+
+    <div class="callout">
+      <strong>Important:</strong> React Native is not simply a website being
+      displayed on a phone. React Native uses native mobile interface
+      components.
+    </div>
+
+    <p>A traditional web page might contain:</p>
+
+<pre><code>&lt;div&gt;
+  &lt;p&gt;Hello World&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+    <p>A React Native application instead uses components:</p>
+
+<pre><code>&lt;View&gt;
+  &lt;Text&gt;Hello World&lt;/Text&gt;
+&lt;/View&gt;</code></pre>
+
+    <h3>2. Common React Native Components</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>View</td>
+          <td>A container used to organize other components.</td>
+        </tr>
+        <tr>
+          <td>Text</td>
+          <td>Displays text on the screen.</td>
+        </tr>
+        <tr>
+          <td>Image</td>
+          <td>Displays images.</td>
+        </tr>
+        <tr>
+          <td>Button</td>
+          <td>Creates a basic button.</td>
+        </tr>
+        <tr>
+          <td>TextInput</td>
+          <td>Allows users to enter information.</td>
+        </tr>
+        <tr>
+          <td>ScrollView</td>
+          <td>Creates scrollable content.</td>
+        </tr>
+        <tr>
+          <td>FlatList</td>
+          <td>Efficiently displays lists of information.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      For this module, our primary focus will be
+      <strong>View, Text, and StyleSheet</strong>.
+    </p>
+
+    <h3>3. Understanding TSX</h3>
+
+    <p>
+      React Native applications commonly use files ending in
+      <span class="inline-code">.tsx</span>. TSX allows us to combine TypeScript
+      with React component syntax.
+    </p>
+
+<pre><code>function App() {
+  return (
+    &lt;View&gt;
+      &lt;Text&gt;Hello Mobile Development!&lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+
+    <p>Breaking this down:</p>
+
+    <ul>
+      <li><span class="inline-code">function App()</span> defines a function named App.</li>
+      <li><span class="inline-code">return</span> identifies what should appear on the screen.</li>
+      <li><span class="inline-code">&lt;View&gt;</span> creates a container.</li>
+      <li><span class="inline-code">&lt;Text&gt;</span> displays text.</li>
+    </ul>
+
+    <h3>4. Your First React Native Component</h3>
+
+<pre><code>import React from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
+function App(): React.JSX.Element {
+  return (
+    &lt;SafeAreaView style={styles.container}&gt;
+      &lt;View&gt;
+        &lt;Text style={styles.title}&gt;
+          My First Mobile App
+        &lt;/Text&gt;
+
+        &lt;Text&gt;
+          Welcome to React Native!
+        &lt;/Text&gt;
+      &lt;/View&gt;
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+});
+
+export default App;</code></pre>
+
+    <div class="callout success">
+      Think of the structure as:
+      <strong>Component → Content → Style</strong>.
+    </div>
+
+    <h3>5. Understanding View</h3>
+
+    <p>
+      A <span class="inline-code">View</span> is one of the most commonly used
+      React Native components. It is generally used to organize other
+      components.
+    </p>
+
+<pre><code>&lt;View&gt;
+  &lt;Text&gt;Student Information&lt;/Text&gt;
+  &lt;Text&gt;Name: John Smith&lt;/Text&gt;
+  &lt;Text&gt;Major: Computer Science&lt;/Text&gt;
+&lt;/View&gt;</code></pre>
+
+    <p>Views can also be nested:</p>
+
+<pre><code>&lt;View&gt;
+
+  &lt;View&gt;
+    &lt;Text&gt;Student Information&lt;/Text&gt;
+  &lt;/View&gt;
+
+  &lt;View&gt;
+    &lt;Text&gt;Computer Science&lt;/Text&gt;
+  &lt;/View&gt;
+
+&lt;/View&gt;</code></pre>
+
+    <h3>6. Understanding Text</h3>
+
+    <p>
+      Text displayed in a React Native application should normally be placed
+      inside a <span class="inline-code">Text</span> component.
+    </p>
+
+    <h4>Correct</h4>
+
+<pre><code>&lt;Text&gt;Hello World&lt;/Text&gt;</code></pre>
+
+    <h4>Incorrect</h4>
+
+<pre><code>&lt;View&gt;
+  Hello World
+&lt;/View&gt;</code></pre>
+
+    <h3>7. Styling a React Native Application</h3>
+
+    <p>
+      React Native does not normally use traditional CSS stylesheets. Styles
+      can instead be created using
+      <span class="inline-code">StyleSheet.create()</span>.
+    </p>
+
+<pre><code>const styles = StyleSheet.create({
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+});</code></pre>
+
+    <p>Apply the style to a component:</p>
+
+<pre><code>&lt;Text style={styles.title}&gt;
+  My Mobile App
+&lt;/Text&gt;</code></pre>
+
+    <h4>Web CSS</h4>
+
+<pre><code>background-color: blue;
+font-size: 20px;</code></pre>
+
+    <h4>React Native</h4>
+
+<pre><code>backgroundColor: 'blue',
+fontSize: 20,</code></pre>
+
+    <p>
+      Notice that React Native uses <strong>camelCase</strong> property names.
+    </p>
+
+    <h3>8. Common Style Properties</h3>
+
+    <div class="card-grid">
+      <div class="card"><strong>fontSize</strong><br />Changes text size.</div>
+      <div class="card"><strong>fontWeight</strong><br />Controls text weight.</div>
+      <div class="card"><strong>backgroundColor</strong><br />Sets background color.</div>
+      <div class="card"><strong>padding</strong><br />Adds internal spacing.</div>
+      <div class="card"><strong>margin</strong><br />Adds external spacing.</div>
+      <div class="card"><strong>borderRadius</strong><br />Rounds corners.</div>
+      <div class="card"><strong>borderWidth</strong><br />Adds a border.</div>
+      <div class="card"><strong>flex</strong><br />Controls available layout space.</div>
+    </div>
+
+    <h3>9. Flexbox</h3>
+
+    <p>
+      React Native uses Flexbox for layouts. We will explore Flexbox in more
+      detail later, but you should recognize the following:
+    </p>
+
+<pre><code>container: {
+  flex: 1,
+  padding: 20,
+}</code></pre>
+
+    <p>A horizontal layout can use:</p>
+
+<pre><code>row: {
+  flexDirection: 'row',
+}</code></pre>
+
+    <h3>10. Creating Your Own Component</h3>
+
+<pre><code>function Header() {
+  return (
+    &lt;View&gt;
+      &lt;Text style={styles.title}&gt;
+        Student Profile
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+
+    <p>Then use your custom component:</p>
+
+<pre><code>function App() {
+  return (
+    &lt;SafeAreaView&gt;
+      &lt;Header /&gt;
+    &lt;/SafeAreaView&gt;
+  );
+}</code></pre>
+
+    <div class="callout">
+      <strong>Key concept:</strong> React applications are built from small,
+      reusable components.
+    </div>
+
+    <h3>11. Reusing Components</h3>
+
+<pre><code>function CourseInfo() {
+  return (
+    &lt;View style={styles.card}&gt;
+      &lt;Text&gt;Mobile Development&lt;/Text&gt;
+      &lt;Text&gt;Point Park University&lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+
+    <p>You can then place the component in your application with:</p>
+
+<pre><code>&lt;CourseInfo /&gt;</code></pre>
+
+    <h3>12. Basic Debugging</h3>
+
+    <p>Common beginner errors include:</p>
+
+    <ul>
+      <li>Missing opening or closing tags.</li>
+      <li>Forgetting to import a component.</li>
+      <li>Misspelling a component name.</li>
+      <li>Incorrect capitalization.</li>
+      <li>Missing commas or braces in styles.</li>
+    </ul>
+
+    <div class="callout warning">
+      When an error occurs, read the first meaningful error message in the
+      terminal before changing code.
+    </div>
+  </section>
+
+  <section id="lab">
+    <h2>Module 2 Lab: Student Profile App</h2>
+
+    <h3>Lab Objective</h3>
+
+    <p>
+      In this lab, you will create your first complete React Native interface.
+      You will use View, Text, StyleSheet, and a custom component to build a
+      Student Profile application.
+    </p>
+
+    <h3>Part 1 — Create the Application</h3>
+
+    <ol>
+      <li>Use the React Native environment configured during Module 1.</li>
+      <li>Create a project named <span class="inline-code">StudentProfile</span>.</li>
+      <li>Open the project in Visual Studio Code.</li>
+      <li>Start the Android Emulator.</li>
+      <li>Run the application.</li>
+      <li>Verify that the starter application loads successfully.</li>
+    </ol>
+
+    <div class="callout success">
+      <strong>Checkpoint 1:</strong> Show the instructor a running React Native
+      application in the Android Emulator.
+    </div>
+
+    <h3>Part 2 — Create the Basic Profile Screen</h3>
+
+<pre><code>import React from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
+function App(): React.JSX.Element {
+
+  return (
+    &lt;SafeAreaView style={styles.container}&gt;
+
+      &lt;Text style={styles.title}&gt;
+        Student Profile
+      &lt;/Text&gt;
+
+      &lt;View style={styles.card}&gt;
+
+        &lt;Text style={styles.name}&gt;
+          John Smith
+        &lt;/Text&gt;
+
+        &lt;Text&gt;
+          Major: Computer Science
+        &lt;/Text&gt;
+
+        &lt;Text&gt;
+          Class: Senior
+        &lt;/Text&gt;
+
+        &lt;Text&gt;
+          Email: johnsmith@example.com
+        &lt;/Text&gt;
+
+      &lt;/View&gt;
+
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+
+  card: {
+    padding: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+
+  name: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+
+});
+
+export default App;</code></pre>
+
+    <h3>Part 3 — Customize the Profile</h3>
+
+    <p>
+      Replace the sample information with your own information or fictional
+      information.
+    </p>
+
+    <p>Your profile must contain:</p>
+
+    <ul class="checklist">
+      <li>Name</li>
+      <li>Major</li>
+      <li>Year or class standing</li>
+      <li>Email</li>
+      <li>Favorite programming language</li>
+      <li>Career interest</li>
+    </ul>
+
+    <h3>Part 4 — Add an About Me Section</h3>
+
+<pre><code>&lt;View style={styles.card}&gt;
+
+  &lt;Text style={styles.sectionTitle}&gt;
+    About Me
+  &lt;/Text&gt;
+
+  &lt;Text&gt;
+    I am a Computer Science student interested
+    in software development and cybersecurity.
+  &lt;/Text&gt;
+
+&lt;/View&gt;</code></pre>
+
+    <p>Add the following style:</p>
+
+<pre><code>sectionTitle: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  marginBottom: 10,
+},</code></pre>
+
+    <h3>Part 5 — Create a Custom Component</h3>
+
+<pre><code>function UniversityInfo() {
+
+  return (
+
+    &lt;View style={styles.card}&gt;
+
+      &lt;Text style={styles.sectionTitle}&gt;
+        University
+      &lt;/Text&gt;
+
+      &lt;Text&gt;
+        Point Park University
+      &lt;/Text&gt;
+
+      &lt;Text&gt;
+        Pittsburgh, Pennsylvania
+      &lt;/Text&gt;
+
+    &lt;/View&gt;
+
+  );
+}</code></pre>
+
+    <p>Add the component to the application:</p>
+
+<pre><code>&lt;UniversityInfo /&gt;</code></pre>
+
+    <h3>Part 6 — Experiment With Styling</h3>
+
+    <p>
+      Change at least <strong>five visual properties</strong>. You may use:
+    </p>
+
+    <ul>
+      <li>fontSize</li>
+      <li>fontWeight</li>
+      <li>backgroundColor</li>
+      <li>padding</li>
+      <li>margin</li>
+      <li>borderRadius</li>
+      <li>borderWidth</li>
+    </ul>
+
+    <h3>Part 7 — Debugging Exercise</h3>
+
+    <ol>
+      <li>Intentionally remove a closing <span class="inline-code">&lt;/Text&gt;</span> tag.</li>
+      <li>Run the application.</li>
+      <li>Observe the resulting error.</li>
+      <li>Repair the error.</li>
+      <li>Next, remove <span class="inline-code">Text</span> from the import statement.</li>
+      <li>Run the application again.</li>
+      <li>Observe the error and then repair it.</li>
+    </ol>
+
+    <h3>Lab Submission</h3>
+
+    <ul class="checklist">
+      <li>Screenshot of the completed application running in the Android Emulator.</li>
+      <li>Screenshot of the project open in VS Code.</li>
+      <li>All source code.</li>
+      <li>GitHub repository URL.</li>
+    </ul>
+
+    <p>Suggested repository structure:</p>
+
+<pre><code>CMPS-Mobile
+|
+└── Module2
+    └── StudentProfile</code></pre>
+  </section>
+
+  <section id="assignment">
+    <h2>Module 2 Assignment: Personal Profile Mobile App</h2>
+
+    <h3>Assignment Overview</h3>
+
+    <p>
+      Create your first independently designed React Native mobile application.
+      You will build a Personal Profile application using the concepts
+      introduced during Module 2.
+    </p>
+
+    <div class="callout warning">
+      Your assignment should be different from the application created during
+      the lab. You may use the lab for reference, but your design and content
+      should be your own.
+    </div>
+
+    <h3>Application Requirements</h3>
+
+    <p>Your application must contain at least four sections. Examples include:</p>
+
+    <ul>
+      <li>Profile</li>
+      <li>Education</li>
+      <li>Technical Skills</li>
+      <li>Career Goals</li>
+    </ul>
+
+    <p>You may substitute other appropriate categories.</p>
+
+    <h3>Technical Requirements</h3>
+
+    <ul class="checklist">
+      <li>At least four View components.</li>
+      <li>At least eight Text components.</li>
+      <li>At least two custom components.</li>
+      <li>A StyleSheet.</li>
+      <li>At least six different styling properties.</li>
+      <li>Proper spacing and organization.</li>
+      <li>At least one use of borderRadius.</li>
+      <li>At least two different font sizes.</li>
+      <li>At least one use of fontWeight.</li>
+      <li>At least one background color.</li>
+      <li>The application must successfully run in the Android Emulator.</li>
+    </ul>
+
+    <h3>Custom Component Requirement</h3>
+
+    <p>
+      At least two sections of your application must be implemented as custom
+      React components.
+    </p>
+
+<pre><code>function Education() {
+  return (
+    &lt;View&gt;
+      &lt;Text&gt;Education&lt;/Text&gt;
+      &lt;Text&gt;Computer Science&lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+
+<pre><code>function CareerGoals() {
+  return (
+    &lt;View&gt;
+      &lt;Text&gt;Career Goals&lt;/Text&gt;
+      &lt;Text&gt;
+        Become a software engineer.
+      &lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+
+    <p>Use the components in your application:</p>
+
+<pre><code>&lt;Education /&gt;
+&lt;CareerGoals /&gt;</code></pre>
+
+    <h3>Written Questions</h3>
+
+    <ol>
+      <li>What is React Native, and why would an organization choose it for mobile application development?</li>
+      <li>What is the purpose of a View component?</li>
+      <li>Why must text normally be placed inside a Text component?</li>
+      <li>What is TSX?</li>
+      <li>What is the purpose of StyleSheet.create()?</li>
+      <li>What is a React component?</li>
+      <li>Why would developers divide an application into multiple components instead of putting everything inside App.tsx?</li>
+      <li>Describe one error you encountered while developing your application and explain how you resolved it.</li>
+    </ol>
+
+    <h3>Assignment Submission Requirements</h3>
+
+    <ul class="checklist">
+      <li>GitHub repository URL.</li>
+      <li>Screenshot of the application running in the Android Emulator.</li>
+      <li>Screenshot showing the project and source code in VS Code.</li>
+      <li>Answers to all eight written questions.</li>
+      <li>A brief paragraph describing your application.</li>
+      <li>All source code committed to GitHub.</li>
+    </ul>
+  </section>
+
+  <section id="rubric">
+    <h2>Assignment Grading Rubric</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Application successfully builds and runs</td>
+          <td>20</td>
+        </tr>
+        <tr>
+          <td>Required content and sections</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>Correct use of React Native components</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>Custom components</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>Styling and visual presentation</td>
+          <td>15</td>
+        </tr>
+        <tr>
+          <td>Code organization and readability</td>
+          <td>10</td>
+        </tr>
+        <tr>
+          <td>Written questions</td>
+          <td>10</td>
+        </tr>
+        <tr>
+          <th>Total</th>
+          <th>100</th>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong>Coming next:</strong> Module 3 will build on this foundation by
+      introducing user interaction, props, state, buttons, and events.
+    </div>
+
+    <a class="top-link" href="#top">↑ Back to top</a>
+  </section>
+
+</main>
+
+<footer>
+  <p>Mobile Development | Module 2 | React Native & TypeScript</p>
+</footer>
+
+</body>
+</html>
