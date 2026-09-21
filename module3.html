@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Module 3 - Components, Props, State & User Interaction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #1f2937;
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        nav {
+            background-color: #111827;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 12px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h2 {
+            color: #1f2937;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            color: #374151;
+            margin-top: 25px;
+        }
+
+        ul,
+        ol {
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        pre {
+            background-color: #111827;
+            color: #f9fafb;
+            padding: 18px;
+            border-radius: 6px;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .note {
+            background-color: #eef6ff;
+            border-left: 5px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .assignment {
+            background-color: #f0fdf4;
+            border-left: 5px solid #16a34a;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .discussion {
+            background-color: #fff7ed;
+            border-left: 5px solid #ea580c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #2563eb;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #1d4ed8;
+        }
+
+        footer {
+            background-color: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 700px) {
+            header h1 {
+                font-size: 1.7rem;
+            }
+
+            nav a {
+                display: block;
+                margin: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Module 3: Components, Props, State & User Interaction</h1>
+    <p>Mobile Application Development with React Native</p>
+</header>
+
+<nav>
+    <a href="index.html">Course Home</a>
+    <a href="module1.html">Module 1</a>
+    <a href="module2.html">Module 2</a>
+    <a href="module3.html">Module 3</a>
+    <a href="module4.html">Module 4</a>
+</nav>
+
+<div class="container">
+
+    <!-- MODULE OVERVIEW -->
+
+    <section class="card">
+
+        <h2>Module Overview</h2>
+
+        <p>
+            In Module 3, we move beyond static mobile interfaces and begin
+            building applications that respond to the user.
+        </p>
+
+        <p>
+            React Native applications are constructed from reusable components.
+            Components allow developers to divide an application into smaller,
+            manageable pieces that can be reused throughout an application.
+        </p>
+
+        <p>
+            You will also learn how data can be passed between components using
+            <strong>props</strong> and how applications can maintain changing
+            information using <strong>state</strong>.
+        </p>
+
+        <p>
+            By the end of this module, you will create an interactive React Native
+            application that accepts user input, responds to button presses,
+            updates information on the screen, and conditionally displays content.
+        </p>
+
+    </section>
+
+
+    <!-- LEARNING OBJECTIVES -->
+
+    <section class="card">
+
+        <h2>Learning Objectives</h2>
+
+        <p>After completing this module, you should be able to:</p>
+
+        <ul>
+            <li>Explain the purpose of components in React Native.</li>
+            <li>Create functional React Native components.</li>
+            <li>Build reusable components.</li>
+            <li>Pass information between components using props.</li>
+            <li>Explain the difference between props and state.</li>
+            <li>Manage application state using the <code>useState</code> hook.</li>
+            <li>Capture user input using <code>TextInput</code>.</li>
+            <li>Respond to button presses and user events.</li>
+            <li>Use conditional rendering to change the user interface.</li>
+            <li>Build a small interactive mobile application.</li>
+        </ul>
+
+    </section>
+
+
+    <!-- LEARNING RESOURCES -->
+
+    <section class="card">
+
+        <h2>Learning Resources</h2>
+
+        <p>
+            Use the following resources while completing this module:
+        </p>
+
+        <ul>
+            <li>
+                React Native Documentation –
+                <a href="https://reactnative.dev/docs/getting-started"
+                   target="_blank">
+                    Getting Started
+                </a>
+            </li>
+
+            <li>
+                React Documentation –
+                <a href="https://react.dev/learn"
+                   target="_blank">
+                    Learn React
+                </a>
+            </li>
+
+            <li>
+                React Documentation –
+                <a href="https://react.dev/learn/state-a-components-memory"
+                   target="_blank">
+                    State: A Component's Memory
+                </a>
+            </li>
+
+            <li>
+                React Native Documentation –
+                <a href="https://reactnative.dev/docs/textinput"
+                   target="_blank">
+                    TextInput
+                </a>
+            </li>
+
+            <li>
+                React Native Documentation –
+                <a href="https://reactnative.dev/docs/button"
+                   target="_blank">
+                    Button
+                </a>
+            </li>
+
+            <li>
+                React Native Documentation –
+                <a href="https://reactnative.dev/docs/pressable"
+                   target="_blank">
+                    Pressable
+                </a>
+            </li>
+        </ul>
+
+        <div class="note">
+            <strong>Important:</strong>
+            You do not need to memorize every React Native component.
+            Professional developers regularly reference documentation.
+            Focus on understanding how components, props, state, and events
+            work together.
+        </div>
+
+    </section>
+
+
+    <!-- LECTURE -->
+
+    <section class="card">
+
+        <h2>Lecture: Building Interactive Mobile Applications</h2>
+
+        <h3>1. What is a Component?</h3>
+
+        <p>
+            Components are the building blocks of React Native applications.
+            A component represents a portion of the user interface.
+        </p>
+
+        <pre><code>function Welcome() {
+
+    return (
+        &lt;View&gt;
+            &lt;Text&gt;Welcome to my app!&lt;/Text&gt;
+        &lt;/View&gt;
+    );
+
+}</code></pre>
+
+        <p>
+            Large applications are typically divided into many smaller
+            components.
+        </p>
+
+        <pre><code>App
+ |
+ +-- Header
+ |
+ +-- UserProfile
+ |
+ +-- ProductCard
+ |
+ +-- Counter
+ |
+ +-- Footer</code></pre>
+
+        <p>
+            Components make applications easier to develop, test, maintain,
+            and reuse.
+        </p>
+
+
+        <h3>2. Props</h3>
+
+        <p>
+            Props allow information to be passed from one component to another.
+        </p>
+
+        <p>
+            Think of props as information that is
+            <strong>given to a component</strong>.
+        </p>
+
+        <pre><code>function WineCard({ name, type }) {
+
+    return (
+        &lt;View&gt;
+
+            &lt;Text&gt;{name}&lt;/Text&gt;
+
+            &lt;Text&gt;{type}&lt;/Text&gt;
+
+        &lt;/View&gt;
+    );
+
+}</code></pre>
+
+        <p>The component could then be used like this:</p>
+
+        <pre><code>&lt;WineCard
+    name="Creekside Blanc"
+    type="White Wine"
+/&gt;</code></pre>
+
+        <p>
+            The same component can now display many different wines simply by
+            changing the props.
+        </p>
+
+
+        <h3>3. Understanding State</h3>
+
+        <p>
+            State represents information that can change while the application
+            is running.
+        </p>
+
+        <p>
+            React provides the <code>useState</code> hook for managing state.
+        </p>
+
+        <pre><code>import { useState } from 'react';
+
+const [count, setCount] = useState(0);</code></pre>
+
+        <p>This creates two things:</p>
+
+        <ul>
+            <li><code>count</code> – the current value.</li>
+            <li><code>setCount</code> – a function used to change the value.</li>
+        </ul>
+
+        <pre><code>&lt;Button
+    title="Add One"
+    onPress={() =&gt; setCount(count + 1)}
+/&gt;</code></pre>
+
+        <p>The React process looks like this:</p>
+
+        <pre><code>User performs an action
+        |
+        v
+Event Handler Executes
+        |
+        v
+State Changes
+        |
+        v
+React Re-renders Component
+        |
+        v
+Updated Screen</code></pre>
+
+
+        <h3>4. Props vs. State</h3>
+
+        <table>
+
+            <tr>
+                <th>Props</th>
+                <th>State</th>
+            </tr>
+
+            <tr>
+                <td>Passed into a component</td>
+                <td>Managed by the component</td>
+            </tr>
+
+            <tr>
+                <td>Usually supplied by a parent</td>
+                <td>Changes while the application runs</td>
+            </tr>
+
+            <tr>
+                <td>Read-only</td>
+                <td>Can be updated</td>
+            </tr>
+
+            <tr>
+                <td>Helps create reusable components</td>
+                <td>Makes applications interactive</td>
+            </tr>
+
+        </table>
+
+
+        <h3>5. User Input with TextInput</h3>
+
+        <p>
+            Mobile applications frequently need to collect information from
+            users. React Native provides the <code>TextInput</code> component.
+        </p>
+
+        <pre><code>const [name, setName] = useState('');
+
+&lt;TextInput
+    placeholder="Enter your name"
+    value={name}
+    onChangeText={setName}
+/&gt;
+
+&lt;Text&gt;
+    Hello, {name}!
+&lt;/Text&gt;</code></pre>
+
+
+        <h3>6. Event Handling</h3>
+
+        <p>
+            Events allow an application to respond to actions performed by
+            the user.
+        </p>
+
+        <p>Common React Native events include:</p>
+
+        <ul>
+            <li><code>onPress</code></li>
+            <li><code>onChangeText</code></li>
+        </ul>
+
+        <pre><code>const [message, setMessage] = useState('');
+
+&lt;Button
+    title="Click Me"
+    onPress={() =&gt; setMessage('The button was pressed!')}
+/&gt;
+
+&lt;Text&gt;
+    {message}
+&lt;/Text&gt;</code></pre>
+
+
+        <h3>7. Conditional Rendering</h3>
+
+        <p>
+            Conditional rendering allows the application to display different
+            information depending on the application's current state.
+        </p>
+
+        <pre><code>const [loggedIn, setLoggedIn] = useState(false);
+
+return (
+
+    &lt;View&gt;
+
+        {loggedIn ? (
+            &lt;Text&gt;Welcome back!&lt;/Text&gt;
+        ) : (
+            &lt;Text&gt;Please log in.&lt;/Text&gt;
+        )}
+
+        &lt;Button
+            title={loggedIn ? "Logout" : "Login"}
+            onPress={() =&gt; setLoggedIn(!loggedIn)}
+        /&gt;
+
+    &lt;/View&gt;
+
+);</code></pre>
+
+    </section>
+
+
+    <!-- LAB -->
+
+    <section class="card">
+
+        <h2>Module 3 Lab: Interactive Inventory Application</h2>
+
+        <p>
+            In this lab, we will build a small inventory application together.
+            The application will demonstrate components, state, event handling,
+            buttons, and conditional rendering.
+        </p>
+
+        <h3>Application Requirements</h3>
+
+        <p>The application will:</p>
+
+        <ul>
+            <li>Display the name of a product.</li>
+            <li>Display the current inventory quantity.</li>
+            <li>Allow the user to increase inventory.</li>
+            <li>Allow the user to decrease inventory.</li>
+            <li>Prevent inventory from becoming negative.</li>
+            <li>Display an OUT OF STOCK message when inventory reaches zero.</li>
+        </ul>
+
+
+        <h3>Step 1: Import React Native Components</h3>
+
+        <pre><code>import React, { useState } from 'react';
+
+import {
+    View,
+    Text,
+    Button,
+    StyleSheet
+} from 'react-native';</code></pre>
+
+
+        <h3>Step 2: Create State</h3>
+
+        <pre><code>const [bottles, setBottles] = useState(12);</code></pre>
+
+
+        <h3>Step 3: Create Inventory Functions</h3>
+
+        <pre><code>const addBottle = () =&gt; {
+
+    setBottles(bottles + 1);
+
+};
+
+const removeBottle = () =&gt; {
+
+    if (bottles &gt; 0) {
+
+        setBottles(bottles - 1);
+
+    }
+
+};</code></pre>
+
+
+        <h3>Step 4: Display the Inventory</h3>
+
+        <pre><code>&lt;Text&gt;
+    Bottles Available: {bottles}
+&lt;/Text&gt;
+
+&lt;Button
+    title="Add Bottle"
+    onPress={addBottle}
+/&gt;
+
+&lt;Button
+    title="Remove Bottle"
+    onPress={removeBottle}
+/&gt;</code></pre>
+
+
+        <h3>Step 5: Add Conditional Rendering</h3>
+
+        <pre><code>{bottles === 0 &amp;&amp; (
+
+    &lt;Text&gt;
+        OUT OF STOCK
+    &lt;/Text&gt;
+
+)}</code></pre>
+
+
+        <h3>Complete Lab Example</h3>
+
+        <pre><code>import React, { useState } from 'react';
+
+import {
+    View,
+    Text,
+    Button,
+    StyleSheet
+} from 'react-native';
+
+
+export default function App() {
+
+    const [bottles, setBottles] = useState(12);
+
+
+    const addBottle = () =&gt; {
+
+        setBottles(bottles + 1);
+
+    };
+
+
+    const removeBottle = () =&gt; {
+
+        if (bottles &gt; 0) {
+
+            setBottles(bottles - 1);
+
+        }
+
+    };
+
+
+    return (
+
+        &lt;View style={styles.container}&gt;
+
+            &lt;Text style={styles.title}&gt;
+                Wine Inventory
+            &lt;/Text&gt;
+
+            &lt;Text style={styles.wine}&gt;
+                Creekside Blanc
+            &lt;/Text&gt;
+
+            &lt;Text style={styles.count}&gt;
+                Bottles Available: {bottles}
+            &lt;/Text&gt;
+
+
+            {bottles === 0 &amp;&amp; (
+
+                &lt;Text style={styles.outOfStock}&gt;
+                    OUT OF STOCK
+                &lt;/Text&gt;
+
+            )}
+
+
+            &lt;Button
+                title="Add Bottle"
+                onPress={addBottle}
+            /&gt;
+
+
+            &lt;Button
+                title="Remove Bottle"
+                onPress={removeBottle}
+            /&gt;
+
+        &lt;/View&gt;
+
+    );
+
+}
+
+
+const styles = StyleSheet.create({
+
+    container: {
+
+        flex: 1,
+        justifyContent: 'center',
+        padding: 30
+
+    },
+
+    title: {
+
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginBottom: 30
+
+    },
+
+    wine: {
+
+        fontSize: 22,
+        marginBottom: 10
+
+    },
+
+    count: {
+
+        fontSize: 18,
+        marginBottom: 20
+
+    },
+
+    outOfStock: {
+
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20
+
+    }
+
+});</code></pre>
+
+
+        <h3>Lab Challenge</h3>
+
+        <p>
+            After completing the basic application, modify it by creating a
+            reusable <code>WineCard</code> component.
+        </p>
+
+        <pre><code>function WineCard({ name, type }) {
+
+    return (
+
+        &lt;View&gt;
+
+            &lt;Text&gt;
+                {name}
+            &lt;/Text&gt;
+
+            &lt;Text&gt;
+                {type}
+            &lt;/Text&gt;
+
+        &lt;/View&gt;
+
+    );
+
+}</code></pre>
+
+        <p>Use the component inside the application:</p>
+
+        <pre><code>&lt;WineCard
+    name="Creekside Blanc"
+    type="White Wine"
+/&gt;</code></pre>
+
+    </section>
+
+
+    <!-- HOMEWORK -->
+
+    <section class="card">
+
+        <h2>Module 3 Homework Assignment</h2>
+
+        <div class="assignment">
+
+            <h3>Interactive Event Registration Application</h3>
+
+            <p>
+                For this assignment, you will create an interactive React Native
+                mobile application that allows a user to register for an event.
+            </p>
+
+        </div>
+
+
+        <h3>Application Requirements</h3>
+
+        <p>Your application must include:</p>
+
+        <ol>
+
+            <li>
+                At least <strong>two functional components</strong>.
+            </li>
+
+            <li>
+                At least <strong>one component using props</strong>.
+            </li>
+
+            <li>
+                At least <strong>two pieces of state</strong> using
+                <code>useState</code>.
+            </li>
+
+            <li>
+                At least <strong>one TextInput</strong>.
+            </li>
+
+            <li>
+                At least <strong>two buttons or Pressable components</strong>.
+            </li>
+
+            <li>
+                At least <strong>one example of conditional rendering</strong>.
+            </li>
+
+            <li>
+                Appropriate React Native styling.
+            </li>
+
+            <li>
+                Comments explaining important sections of your code.
+            </li>
+
+        </ol>
+
+
+        <h3>Example Application</h3>
+
+        <pre><code>Event Registration
+
+Name:
+
+[________________________]
+
+
+Event:
+
+Mobile Development Workshop
+
+
+Guests: 2
+
+
+[ - Guest ]
+
+[ + Guest ]
+
+
+[ Register ]</code></pre>
+
+
+        <p>
+            After the user selects Register, the application could display:
+        </p>
+
+        <pre><code>Registration Complete!
+
+Name: Alex Smith
+
+Event:
+Mobile Development Workshop
+
+Guests: 2</code></pre>
+
+
+        <h3>Submission Requirements</h3>
+
+        <p>Submit the following:</p>
+
+        <ul>
+            <li>GitHub repository URL.</li>
+            <li>Screenshot of the running application.</li>
+            <li>Complete React Native source code.</li>
+            <li>A README describing the application.</li>
+            <li>
+                A short explanation describing where you used
+                <strong>props</strong> and <strong>state</strong>.
+            </li>
+        </ul>
+
+    </section>
+
+
+    <!-- DISCUSSION -->
+
+    <section class="card">
+
+        <h2>Module 3 Discussion</h2>
+
+        <div class="discussion">
+
+            <p>
+                <strong>Discussion Question:</strong>
+            </p>
+
+            <p>
+                React Native applications are built from reusable components.
+                Why might breaking an application into smaller components make
+                an application easier to develop and maintain?
+            </p>
+
+            <p>
+                As part of your response, identify one component from an
+                application you regularly use—such as Instagram, Amazon,
+                Spotify, a banking application, or another mobile app—that
+                you believe could be reused in multiple parts of the application.
+            </p>
+
+        </div>
+
+
+        <h3>Discussion Requirements</h3>
+
+        <ul>
+            <li>Post an original response.</li>
+            <li>Clearly explain your reasoning.</li>
+            <li>Provide at least one real-world example.</li>
+            <li>Respond to at least one classmate.</li>
+        </ul>
+
+    </section>
+
+
+    <!-- MODULE SUMMARY -->
+
+    <section class="card">
+
+        <h2>Module 3 Summary</h2>
+
+        <p>
+            In this module, you learned how React Native applications become
+            interactive.
+        </p>
+
+        <p>You should now understand how to:</p>
+
+        <ul>
+            <li>Create reusable components.</li>
+            <li>Pass information using props.</li>
+            <li>Store changing information using state.</li>
+            <li>Use the <code>useState</code> hook.</li>
+            <li>Capture user input.</li>
+            <li>Respond to user events.</li>
+            <li>Conditionally display information.</li>
+        </ul>
+
+        <div class="note">
+
+            <strong>Coming Next: Module 4</strong>
+
+            <p>
+                In Module 4, we will move from single-screen applications to
+                <strong>multi-screen mobile applications</strong> by introducing
+                React Native navigation.
+            </p>
+
+            <p>
+                You will learn how users move between screens and how information
+                can be passed from one screen to another.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<footer>
+
+    <p>
+        Mobile Application Development | Module 3
+    </p>
+
+</footer>
+
+</body>
+</html>
