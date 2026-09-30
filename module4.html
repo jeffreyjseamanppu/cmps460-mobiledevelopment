@@ -1,0 +1,655 @@
+<div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6; color: #222; max-width: 1000px; margin: 0 auto;">
+
+    <!-- HEADER -->
+    <div style="background-color: #17365d; color: white; padding: 25px; border-radius: 8px;">
+        <h1 style="margin: 0;">Module 4: Navigation &amp; Multi-Screen Applications</h1>
+        <p style="font-size: 18px; margin-bottom: 0;">
+            Mobile Programming – React Native &amp; TypeScript
+        </p>
+    </div>
+
+    <!-- MODULE OBJECTIVES -->
+    <div style="margin-top: 25px; padding: 20px; border-left: 6px solid #17365d; background-color: #f4f7fa;">
+        <h2>Module Objectives</h2>
+
+        <p>By the end of this module, students will be able to:</p>
+
+        <ul>
+            <li>Explain why navigation is necessary in mobile applications.</li>
+            <li>Describe the difference between single-screen and multi-screen applications.</li>
+            <li>Create multiple screens in a React Native application.</li>
+            <li>Implement stack-based navigation.</li>
+            <li>Navigate between screens using buttons and other user interface elements.</li>
+            <li>Pass information from one screen to another.</li>
+            <li>Retrieve and display navigation parameters on a destination screen.</li>
+            <li>Organize screens into a logical React Native project structure.</li>
+            <li>Build a functional multi-screen mobile application using React Native and TypeScript.</li>
+        </ul>
+    </div>
+
+    <!-- MODULE OVERVIEW -->
+    <div style="margin-top: 25px;">
+        <h2 style="color: #17365d;">Module Overview</h2>
+
+        <p>
+            Most mobile applications contain more than one screen. Think about applications you use every day.
+            A shopping application may have a home screen, product list, product details, shopping cart,
+            account page, and settings page. Social media applications may contain feeds, profiles,
+            messages, notifications, and settings.
+        </p>
+
+        <p>
+            In this module, we will move beyond single-screen React Native applications and begin building
+            applications that allow users to move between multiple screens.
+        </p>
+
+        <p>
+            We will use <strong>React Navigation</strong>, a commonly used navigation solution for React Native.
+            Students will learn how to create screens, configure navigation, move between screens, and pass
+            information from one screen to another.
+        </p>
+
+        <div style="background-color: #fff4d6; padding: 15px; border-radius: 6px;">
+            <strong>Key Concept:</strong> Navigation determines how users move through the different screens
+            and features of a mobile application.
+        </div>
+    </div>
+
+    <!-- LECTURE -->
+    <div style="margin-top: 30px;">
+        <h2 style="color: #17365d;">Lecture: Navigation in React Native</h2>
+
+        <h3>1. What Is Navigation?</h3>
+
+        <p>
+            Navigation is the process of moving between different screens or views within an application.
+        </p>
+
+        <p>For example, consider a simple store application:</p>
+
+        <div style="text-align: center; background-color: #f4f4f4; padding: 20px; margin: 15px 0;">
+            <strong>
+                Home Screen &rarr; Products Screen &rarr; Product Details Screen
+            </strong>
+        </div>
+
+        <p>
+            Each screen has a different purpose, but all of the screens work together as part of the same application.
+        </p>
+
+        <h3>2. Common Types of Mobile Navigation</h3>
+
+        <h4>Stack Navigation</h4>
+
+        <p>
+            Stack navigation works much like pages being placed on top of one another.
+            When a new screen opens, it is placed on top of the previous screen.
+        </p>
+
+        <p>
+            Pressing the back button removes the current screen and returns the user to the previous screen.
+        </p>
+
+        <div style="background-color: #eef5ff; padding: 15px; margin: 15px 0;">
+            Home<br>
+            &nbsp;&nbsp;&darr;<br>
+            Products<br>
+            &nbsp;&nbsp;&darr;<br>
+            Product Details
+        </div>
+
+        <h4>Tab Navigation</h4>
+
+        <p>
+            Tab navigation allows users to switch between major sections of an application using tabs,
+            usually located at the bottom of the screen.
+        </p>
+
+        <p>Examples might include:</p>
+
+        <ul>
+            <li>Home</li>
+            <li>Products</li>
+            <li>Favorites</li>
+            <li>Profile</li>
+        </ul>
+
+        <p>
+            In this module, our primary focus will be <strong>Stack Navigation</strong>.
+        </p>
+
+        <h3>3. Installing React Navigation</h3>
+
+        <p>
+            React Navigation is not automatically included in every React Native project.
+            It must be added to the project.
+        </p>
+
+        <p>From the terminal inside your project folder, run:</p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>npm install @react-navigation/native
+
+npm install @react-navigation/native-stack
+
+npx expo install react-native-screens react-native-safe-area-context</code></pre>
+
+        <p>
+            After installation, restart the development server if necessary.
+        </p>
+
+        <h3>4. Creating Screens</h3>
+
+        <p>
+            As applications become larger, it is helpful to place screens inside their own folder.
+        </p>
+
+        <pre style="background-color: #f4f4f4; padding: 15px;"><code>project/
+|
+|-- App.tsx
+|
+|-- screens/
+    |-- HomeScreen.tsx
+    |-- ProductsScreen.tsx
+    |-- DetailsScreen.tsx
+    |-- AboutScreen.tsx</code></pre>
+
+        <p>
+            This makes the application easier to understand and maintain.
+        </p>
+
+        <h3>5. Creating a Basic Screen</h3>
+
+        <p>Create a file called <strong>HomeScreen.tsx</strong>.</p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>import React from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+
+export default function HomeScreen({ navigation }: any) {
+    return (
+        &lt;View style={styles.container}&gt;
+
+            &lt;Text style={styles.title}&gt;
+                Welcome to My App
+            &lt;/Text&gt;
+
+            &lt;Button
+                title="View Products"
+                onPress={() =&gt; navigation.navigate('Products')}
+            /&gt;
+
+        &lt;/View&gt;
+    );
+}
+
+const styles = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    title: {
+        fontSize: 28,
+        marginBottom: 20
+    }
+
+});</code></pre>
+
+        <h3>6. Creating the Navigation Stack</h3>
+
+        <p>
+            The application's navigation structure can be configured in <strong>App.tsx</strong>.
+        </p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>import React from 'react';
+
+import {
+    NavigationContainer
+} from '@react-navigation/native';
+
+import {
+    createNativeStackNavigator
+} from '@react-navigation/native-stack';
+
+import HomeScreen from './screens/HomeScreen';
+import ProductsScreen from './screens/ProductsScreen';
+import DetailsScreen from './screens/DetailsScreen';
+import AboutScreen from './screens/AboutScreen';
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+
+    return (
+
+        &lt;NavigationContainer&gt;
+
+            &lt;Stack.Navigator initialRouteName="Home"&gt;
+
+                &lt;Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                /&gt;
+
+                &lt;Stack.Screen
+                    name="Products"
+                    component={ProductsScreen}
+                /&gt;
+
+                &lt;Stack.Screen
+                    name="Details"
+                    component={DetailsScreen}
+                /&gt;
+
+                &lt;Stack.Screen
+                    name="About"
+                    component={AboutScreen}
+                /&gt;
+
+            &lt;/Stack.Navigator&gt;
+
+        &lt;/NavigationContainer&gt;
+
+    );
+}</code></pre>
+
+        <h3>7. Navigating Between Screens</h3>
+
+        <p>
+            The <strong>navigation.navigate()</strong> function can be used to open another screen.
+        </p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px;"><code>navigation.navigate('Products');</code></pre>
+
+        <p>It can be connected to a button:</p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px;"><code>&lt;Button
+    title="View Products"
+    onPress={() =&gt; navigation.navigate('Products')}
+/&gt;</code></pre>
+
+        <h3>8. Passing Data Between Screens</h3>
+
+        <p>
+            Frequently, one screen needs to send information to another screen.
+        </p>
+
+        <p>
+            For example, when a user selects a product, we may want to send the product name and price
+            to the Product Details screen.
+        </p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>navigation.navigate('Details', {
+    productName: 'Wireless Headphones',
+    price: 79.99
+});</code></pre>
+
+        <h3>9. Receiving Data</h3>
+
+        <p>The destination screen receives the information through the route object.</p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>export default function DetailsScreen({ route }: any) {
+
+    const { productName, price } = route.params;
+
+    return (
+
+        &lt;View&gt;
+
+            &lt;Text&gt;
+                {productName}
+            &lt;/Text&gt;
+
+            &lt;Text&gt;
+                ${price}
+            &lt;/Text&gt;
+
+        &lt;/View&gt;
+
+    );
+}</code></pre>
+
+        <h3>10. Why Navigation Matters</h3>
+
+        <p>
+            Good navigation should make an application feel natural and predictable.
+            Users should always understand where they are and how to move to another part of the application.
+        </p>
+
+        <p>Good mobile navigation should be:</p>
+
+        <ul>
+            <li>Simple</li>
+            <li>Consistent</li>
+            <li>Predictable</li>
+            <li>Easy to understand</li>
+            <li>Designed around the user's tasks</li>
+        </ul>
+    </div>
+
+    <!-- LAB -->
+    <div style="margin-top: 35px; padding: 20px; background-color: #f5f9f5; border: 1px solid #c8ddc8; border-radius: 8px;">
+
+        <h2 style="color: #17365d;">Module 4 Lab: Build a Multi-Screen Mobile App</h2>
+
+        <h3>Lab Goal</h3>
+
+        <p>
+            In this lab, you will create a React Native application containing multiple screens
+            and allow users to navigate between them.
+        </p>
+
+        <h3>Step 1 – Create/Open Your React Native Project</h3>
+
+        <p>
+            You may continue using your existing course project or create a new Expo application.
+        </p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px;"><code>npx create-expo-app Module4App
+
+cd Module4App
+
+code .</code></pre>
+
+        <h3>Step 2 – Install Navigation</h3>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>npm install @react-navigation/native
+
+npm install @react-navigation/native-stack
+
+npx expo install react-native-screens react-native-safe-area-context</code></pre>
+
+        <h3>Step 3 – Create a Screens Folder</h3>
+
+        <p>Create a folder named:</p>
+
+        <pre style="background-color: #f4f4f4; padding: 15px;"><code>screens</code></pre>
+
+        <p>Create the following files:</p>
+
+        <ul>
+            <li>HomeScreen.tsx</li>
+            <li>ProductsScreen.tsx</li>
+            <li>DetailsScreen.tsx</li>
+            <li>AboutScreen.tsx</li>
+        </ul>
+
+        <h3>Step 4 – Create the Home Screen</h3>
+
+        <p>The Home screen must contain:</p>
+
+        <ul>
+            <li>An application title</li>
+            <li>A short welcome message</li>
+            <li>A button that opens Products</li>
+            <li>A button that opens About</li>
+        </ul>
+
+        <h3>Step 5 – Create the Products Screen</h3>
+
+        <p>
+            Create at least <strong>three products</strong>. Each product should display:
+        </p>
+
+        <ul>
+            <li>Product name</li>
+            <li>Price</li>
+            <li>View Details button</li>
+        </ul>
+
+        <p>Example:</p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px; overflow-x: auto;"><code>&lt;Text&gt;Wireless Headphones - $79.99&lt;/Text&gt;
+
+&lt;Button
+    title="View Details"
+    onPress={() =&gt;
+        navigation.navigate('Details', {
+            productName: 'Wireless Headphones',
+            price: 79.99
+        })
+    }
+/&gt;</code></pre>
+
+        <h3>Step 6 – Create the Details Screen</h3>
+
+        <p>
+            Retrieve the product information sent from the Products screen and display it.
+        </p>
+
+        <p>The screen should show:</p>
+
+        <ul>
+            <li>Product name</li>
+            <li>Product price</li>
+            <li>A short product description</li>
+        </ul>
+
+        <h3>Step 7 – Create the About Screen</h3>
+
+        <p>The About screen should display:</p>
+
+        <ul>
+            <li>Your name</li>
+            <li>Application name</li>
+            <li>A short description of the application</li>
+            <li>Course name</li>
+        </ul>
+
+        <h3>Step 8 – Test Your Application</h3>
+
+        <p>Run:</p>
+
+        <pre style="background-color: #1e1e1e; color: #fff; padding: 15px;"><code>npx expo start</code></pre>
+
+        <p>Verify that:</p>
+
+        <ul>
+            <li>The application starts without errors.</li>
+            <li>The Home screen appears first.</li>
+            <li>The Products button opens the Products screen.</li>
+            <li>Each product can open the Details screen.</li>
+            <li>The correct product information appears.</li>
+            <li>The About screen opens correctly.</li>
+            <li>The Back button returns to the previous screen.</li>
+        </ul>
+
+        <h3>Lab Submission</h3>
+
+        <p>Submit:</p>
+
+        <ol>
+            <li>Your complete project files or GitHub repository link.</li>
+            <li>A screenshot of the Home screen.</li>
+            <li>A screenshot of the Products screen.</li>
+            <li>A screenshot of the Details screen.</li>
+            <li>A screenshot of the About screen.</li>
+        </ol>
+    </div>
+
+    <!-- HOMEWORK -->
+    <div style="margin-top: 35px; padding: 20px; border: 2px solid #17365d; border-radius: 8px;">
+
+        <h2 style="color: #17365d;">Module 4 Homework Assignment</h2>
+
+        <h3>Build Your Own Multi-Screen Application</h3>
+
+        <p>
+            For this assignment, you will use the concepts introduced in this module to create your
+            own multi-screen React Native application.
+        </p>
+
+        <p>
+            Your application may be based on a topic that interests you.
+        </p>
+
+        <p>Possible ideas include:</p>
+
+        <ul>
+            <li>Restaurant menu</li>
+            <li>Movie application</li>
+            <li>Sports team application</li>
+            <li>Video game collection</li>
+            <li>Music application</li>
+            <li>Travel guide</li>
+            <li>Recipe application</li>
+            <li>Pet adoption application</li>
+            <li>Book collection</li>
+            <li>Fitness application</li>
+            <li>Clothing store</li>
+            <li>Car dealership</li>
+        </ul>
+
+        <h3>Application Requirements</h3>
+
+        <p>Your application must contain at least <strong>four screens</strong>.</p>
+
+        <ol>
+            <li>
+                <strong>Home Screen</strong>
+                <ul>
+                    <li>Application title</li>
+                    <li>Short introduction</li>
+                    <li>Navigation to another section</li>
+                </ul>
+            </li>
+
+            <li>
+                <strong>List Screen</strong>
+                <ul>
+                    <li>Display at least five items related to your topic.</li>
+                    <li>Each item must contain at least two pieces of information.</li>
+                </ul>
+            </li>
+
+            <li>
+                <strong>Details Screen</strong>
+                <ul>
+                    <li>Display information about the item selected by the user.</li>
+                    <li>Information must be passed to this screen using navigation parameters.</li>
+                </ul>
+            </li>
+
+            <li>
+                <strong>About Screen</strong>
+                <ul>
+                    <li>Your name</li>
+                    <li>Application description</li>
+                    <li>Purpose of the application</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Technical Requirements</h3>
+
+        <ul>
+            <li>Use React Native.</li>
+            <li>Use TypeScript.</li>
+            <li>Use React Navigation.</li>
+            <li>Use Stack Navigation.</li>
+            <li>Include at least four screens.</li>
+            <li>Use buttons or touchable elements for navigation.</li>
+            <li>Pass data between at least two screens.</li>
+            <li>Use StyleSheet to provide basic application styling.</li>
+            <li>The application must run without errors.</li>
+        </ul>
+
+        <h3>Submission Requirements</h3>
+
+        <p>Submit the following:</p>
+
+        <ol>
+            <li>Your complete source code or GitHub repository URL.</li>
+            <li>Screenshot of the Home screen.</li>
+            <li>Screenshot of the List screen.</li>
+            <li>Screenshot of the Details screen.</li>
+            <li>Screenshot of the About screen.</li>
+            <li>
+                A short paragraph explaining:
+                <ul>
+                    <li>What your application does.</li>
+                    <li>Why you selected the topic.</li>
+                    <li>How navigation is used in your application.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Grading – 100 Points</h3>
+
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+            <tr style="background-color: #17365d; color: white;">
+                <th style="padding: 10px; border: 1px solid #ccc; text-align: left;">Requirement</th>
+                <th style="padding: 10px; border: 1px solid #ccc; width: 120px;">Points</th>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">Home Screen</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">10</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">List Screen with at least 5 items</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">15</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">Details Screen</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">15</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">About Screen</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">10</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">Navigation works correctly</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">20</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">Data passed between screens</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">15</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">Styling and organization</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">10</td>
+            </tr>
+
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ccc;">Submission completeness</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">5</td>
+            </tr>
+
+            <tr style="font-weight: bold; background-color: #f4f4f4;">
+                <td style="padding: 10px; border: 1px solid #ccc;">Total</td>
+                <td style="padding: 10px; border: 1px solid #ccc; text-align: center;">100</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- WRAP UP -->
+    <div style="margin-top: 30px; padding: 20px; background-color: #17365d; color: white; border-radius: 8px;">
+        <h2 style="color: white;">Module 4 Wrap-Up</h2>
+
+        <p>
+            Navigation is one of the most important concepts in mobile application development.
+            Nearly every real-world mobile application contains multiple screens that users must
+            be able to move between easily.
+        </p>
+
+        <p>
+            After completing this module, you should understand how to create multiple screens,
+            configure stack navigation, navigate between screens, and pass information from one
+            screen to another.
+        </p>
+
+        <p style="margin-bottom: 0;">
+            <strong>Next:</strong> In the next module, we will continue expanding our applications
+            by working with more advanced data and application functionality.
+        </p>
+    </div>
+
+</div>
