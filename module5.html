@@ -1,62 +1,211 @@
 ```html
-<h1>Module 5: Working with Data, Lists &amp; Local Storage</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<h2>Module Overview</h2>
+    <title>Module 5: Working with Data, Lists & Local Storage</title>
 
-<p>
-In the previous modules, you learned how to create React Native applications,
-build reusable components, manage application state, respond to user interaction,
-and navigate between multiple screens. In this module, we will take the next
-step by learning how mobile applications work with collections of data.
-</p>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #222;
+        }
 
-<p>
-Most mobile applications need to manage information. A shopping application
-might maintain a list of products, a fitness application might track workouts,
-and a task management application might store a list of tasks. React Native
-provides tools such as <strong>FlatList</strong> for efficiently displaying
-collections of information.
-</p>
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
 
-<p>
-We will also introduce <strong>local data persistence</strong>. Until now,
-information stored in application state disappears when the application is
-closed or restarted. Using <strong>AsyncStorage</strong>, we can save information
-on the device and retrieve it when the application starts again.
-</p>
+        h1 {
+            color: #1f4e79;
+            border-bottom: 4px solid #1f4e79;
+            padding-bottom: 10px;
+        }
 
-<hr />
+        h2 {
+            color: #1f4e79;
+            margin-top: 40px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 6px;
+        }
 
-<h2>Learning Objectives</h2>
+        h3 {
+            color: #2f5597;
+            margin-top: 28px;
+        }
 
-<p>After completing this module, you should be able to:</p>
+        h4 {
+            color: #444;
+        }
 
-<ul>
-    <li>Work with arrays and objects in TypeScript.</li>
-    <li>Store collections of application data using React state.</li>
-    <li>Display collections of data using the React Native FlatList component.</li>
-    <li>Add and remove items from a collection.</li>
-    <li>Use unique identifiers and keys when displaying list data.</li>
-    <li>Pass data between application screens.</li>
-    <li>Understand the difference between temporary application state and persistent data.</li>
-    <li>Save application data locally using AsyncStorage.</li>
-    <li>Retrieve saved information when an application starts.</li>
-    <li>Use JSON.stringify() and JSON.parse() when storing structured data.</li>
-</ul>
+        p {
+            margin: 12px 0;
+        }
 
-<hr />
+        ul, ol {
+            margin-bottom: 20px;
+        }
 
-<h2>Learning Resources</h2>
+        li {
+            margin-bottom: 6px;
+        }
 
-<h3>1. Working with Arrays and Objects</h3>
+        pre {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 18px;
+            overflow-x: auto;
+            border-radius: 6px;
+            font-size: 14px;
+        }
 
-<p>
-Before working with lists in React Native, it is important to understand how
-JavaScript and TypeScript represent collections of information.
-</p>
+        code {
+            font-family: Consolas, Monaco, monospace;
+        }
 
-<pre><code>
-const tasks = [
+        .concept {
+            background: #eaf2f8;
+            border-left: 5px solid #1f4e79;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .assignment {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: #1f4e79;
+            color: white;
+            text-align: left;
+            padding: 10px;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                margin: 0;
+                padding: 20px;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Module 5: Working with Data, Lists &amp; Local Storage</h1>
+
+    <p><strong>Mobile Programming – React Native &amp; TypeScript</strong></p>
+
+
+    <!-- MODULE OBJECTIVES -->
+
+    <h2>Module Objectives</h2>
+
+    <p>By the end of this module, students will be able to:</p>
+
+    <ul>
+        <li>Explain how mobile applications manage collections of data.</li>
+        <li>Work with arrays and objects using TypeScript.</li>
+        <li>Store collections of application data using React state.</li>
+        <li>Display collections efficiently using the React Native FlatList component.</li>
+        <li>Add and remove items from a collection.</li>
+        <li>Use unique identifiers when displaying list data.</li>
+        <li>Explain the difference between temporary state and persistent storage.</li>
+        <li>Save application data locally using AsyncStorage.</li>
+        <li>Retrieve stored data when an application starts.</li>
+        <li>Use JSON.stringify() and JSON.parse() to store structured data.</li>
+    </ul>
+
+
+    <!-- MODULE OVERVIEW -->
+
+    <h2>Module Overview</h2>
+
+    <p>
+        In Module 4, we learned how to build applications containing multiple
+        screens and how to move information between those screens using React
+        Navigation.
+    </p>
+
+    <p>
+        We will now begin working with larger collections of information.
+        Most real-world mobile applications need to display, modify, and store
+        data. A shopping application might maintain a shopping cart, a fitness
+        application might track workouts, and a task application might maintain
+        a list of things the user needs to complete.
+    </p>
+
+    <p>
+        In this module, we will learn how to represent collections using
+        TypeScript arrays and objects, display those collections using
+        <strong>FlatList</strong>, and allow users to add and remove information.
+    </p>
+
+    <p>
+        We will also introduce <strong>persistent local storage</strong> using
+        AsyncStorage. This will allow our applications to remember information
+        even after the application has been closed.
+    </p>
+
+    <div class="concept">
+        <strong>Key Concept:</strong> Application state stores information while
+        an application is running. Persistent storage allows information to remain
+        available after the application is closed and reopened.
+    </div>
+
+
+    <!-- LECTURE -->
+
+    <h2>Lecture: Working with Data in React Native</h2>
+
+
+    <h3>1. Arrays and Objects</h3>
+
+    <p>
+        Mobile applications frequently work with collections of related information.
+        In TypeScript, we can represent these collections using arrays and objects.
+    </p>
+
+    <pre><code>const tasks = [
     {
         id: "1",
         title: "Complete Mobile Programming Lab",
@@ -67,382 +216,65 @@ const tasks = [
         title: "Study React Native",
         completed: true
     }
-];
-</code></pre>
+];</code></pre>
 
-<p>
-Each object represents one task, while the array represents the entire
-collection of tasks.
-</p>
+    <p>
+        Each object represents one task. The array stores the complete collection
+        of tasks.
+    </p>
 
-<h3>2. Displaying Data with FlatList</h3>
 
-<p>
-React Native provides the <strong>FlatList</strong> component for displaying
-lists of information. FlatList is preferred over manually creating large
-collections of components because it is optimized for mobile applications.
-</p>
+    <h3>2. Creating a TypeScript Interface</h3>
 
-<pre><code>
-&lt;FlatList
-    data={tasks}
-    keyExtractor={(item) =&gt; item.id}
-    renderItem={({ item }) =&gt; (
-        &lt;Text&gt;{item.title}&lt;/Text&gt;
-    )}
-/&gt;
-</code></pre>
+    <p>
+        TypeScript allows us to define the structure that each object should follow.
+    </p>
 
-<p>
-The <strong>data</strong> property identifies the collection to display.
-The <strong>renderItem</strong> property determines how each item appears,
-and <strong>keyExtractor</strong> provides React with a unique identifier
-for each item.
-</p>
-
-<h3>3. Managing a Collection with State</h3>
-
-<p>
-Collections can be stored in application state using the
-<strong>useState</strong> hook.
-</p>
-
-<pre><code>
-const [tasks, setTasks] = useState&lt;Task[]&gt;([]);
-</code></pre>
-
-<p>A new task can be added by creating a new array:</p>
-
-<pre><code>
-setTasks([
-    ...tasks,
-    {
-        id: Date.now().toString(),
-        title: taskName,
-        completed: false
-    }
-]);
-</code></pre>
-
-<p>
-Remember that React state should not be modified directly. Instead, create
-a new array containing the updated information.
-</p>
-
-<h3>4. Removing Items</h3>
-
-<p>
-The JavaScript <strong>filter()</strong> method is commonly used to remove
-an item from a collection.
-</p>
-
-<pre><code>
-const deleteTask = (id: string) =&gt; {
-    setTasks(tasks.filter(task =&gt; task.id !== id));
-};
-</code></pre>
-
-<h3>5. Temporary vs. Persistent Data</h3>
-
-<p>
-React state is temporary. If you store information using useState and restart
-the application, the information will normally disappear.
-</p>
-
-<p>
-Many applications need information to remain available between sessions.
-Examples include:
-</p>
-
-<ul>
-    <li>User preferences</li>
-    <li>Shopping lists</li>
-    <li>Favorite items</li>
-    <li>Notes</li>
-    <li>Tasks</li>
-    <li>Application settings</li>
-</ul>
-
-<p>
-For this module, we will use <strong>AsyncStorage</strong> to introduce
-persistent local storage.
-</p>
-
-<h3>6. AsyncStorage</h3>
-
-<p>
-AsyncStorage provides a simple key-value storage system that allows information
-to be saved on the mobile device.
-</p>
-
-<p>Install AsyncStorage in your Expo project:</p>
-
-<pre><code>
-npx expo install @react-native-async-storage/async-storage
-</code></pre>
-
-<p>Import AsyncStorage:</p>
-
-<pre><code>
-import AsyncStorage from '@react-native-async-storage/async-storage';
-</code></pre>
-
-<h3>7. Saving Data</h3>
-
-<p>
-AsyncStorage stores strings. Arrays and objects therefore need to be converted
-to JSON before they are saved.
-</p>
-
-<pre><code>
-const saveTasks = async (tasks: Task[]) =&gt; {
-    try {
-        await AsyncStorage.setItem(
-            "tasks",
-            JSON.stringify(tasks)
-        );
-    } catch (error) {
-        console.log("Error saving tasks:", error);
-    }
-};
-</code></pre>
-
-<h3>8. Loading Data</h3>
-
-<p>
-When retrieving information, the stored JSON string can be converted back
-into an array or object using JSON.parse().
-</p>
-
-<pre><code>
-const loadTasks = async () =&gt; {
-    try {
-        const savedTasks = await AsyncStorage.getItem("tasks");
-
-        if (savedTasks !== null) {
-            setTasks(JSON.parse(savedTasks));
-        }
-    } catch (error) {
-        console.log("Error loading tasks:", error);
-    }
-};
-</code></pre>
-
-<p>
-This method can be called when the application first loads so previously
-saved information is restored.
-</p>
-
-<hr />
-
-<h2>Module 5 Lab: Task Tracker Application</h2>
-
-<h3>Objective</h3>
-
-<p>
-In this lab, you will create a simple Task Tracker application that combines
-concepts from previous modules with the new data management concepts introduced
-in Module 5.
-</p>
-
-<h3>Requirements</h3>
-
-<p>Your application should contain at least two screens:</p>
-
-<ul>
-    <li><strong>Task List Screen</strong> – Displays the current tasks.</li>
-    <li><strong>Add Task Screen</strong> – Allows the user to enter a new task.</li>
-</ul>
-
-<h3>Part 1 – Create the Task Data Structure</h3>
-
-<p>Create a TypeScript interface representing a task:</p>
-
-<pre><code>
-interface Task {
+    <pre><code>interface Task {
     id: string;
     title: string;
     completed: boolean;
-}
-</code></pre>
+}</code></pre>
 
-<h3>Part 2 – Display Tasks</h3>
+    <p>
+        This helps prevent errors by ensuring every task contains the expected
+        information.
+    </p>
 
-<p>
-Use a FlatList to display all tasks. Each task should display its title.
-</p>
 
-<p>
-If there are no tasks, display a message such as:
-</p>
+    <h3>3. Storing Collections in State</h3>
 
-<blockquote>
-No tasks have been added. Add your first task!
-</blockquote>
+    <p>
+        Collections can be stored using the React <strong>useState</strong> hook.
+    </p>
 
-<h3>Part 3 – Add Tasks</h3>
+    <pre><code>const [tasks, setTasks] = useState&lt;Task[]&gt;([]);</code></pre>
 
-<p>
-Create an Add Task screen containing:
-</p>
+    <p>
+        In this example, the application begins with an empty collection of tasks.
+    </p>
 
-<ul>
-    <li>A TextInput for the task name.</li>
-    <li>An Add Task button.</li>
-    <li>Validation preventing an empty task from being added.</li>
-</ul>
 
-<p>
-After adding the task, return the user to the Task List screen.
-</p>
+    <h3>4. Adding Items to a Collection</h3>
 
-<h3>Part 4 – Delete Tasks</h3>
+    <p>
+        React state should not be modified directly. Instead, we create a new
+        array containing the existing items and the new item.
+    </p>
 
-<p>
-Add a button or touchable control that allows the user to remove a task
-from the list.
-</p>
+    <pre><code>const addTask = (taskName: string) =&gt; {
 
-<h3>Part 5 – Persistent Storage</h3>
+    const newTask = {
+        id: Date.now().toString(),
+        title: taskName,
+        completed: false
+    };
 
-<p>
-Use AsyncStorage to save the task collection whenever it changes.
-When the application starts, load the previously saved tasks.
-</p>
+    setTasks([...tasks, newTask]);
+};</code></pre>
 
-<h3>Testing</h3>
 
-<p>Test the following:</p>
+    <h3>5. Displaying Data with FlatList</h3>
 
-<ol>
-    <li>Add at least three tasks.</li>
-    <li>Verify all tasks appear in the FlatList.</li>
-    <li>Delete one task.</li>
-    <li>Close the application.</li>
-    <li>Restart the application.</li>
-    <li>Verify the remaining tasks are still available.</li>
-</ol>
-
-<h3>Lab Submission</h3>
-
-<p>Submit the following:</p>
-
-<ul>
-    <li>Your completed React Native project files.</li>
-    <li>A screenshot showing your Task List screen.</li>
-    <li>A screenshot showing your Add Task screen.</li>
-    <li>A screenshot demonstrating multiple tasks stored in the application.</li>
-</ul>
-
-<hr />
-
-<h2>Homework Assignment: Add Persistent Data to Your Mobile Application</h2>
-
-<h3>Overview</h3>
-
-<p>
-For this assignment, you will apply the concepts from Module 5 to the mobile
-application you are developing for this course.
-</p>
-
-<p>
-Your goal is to identify information that your application needs to manage
-and create a way for the user to interact with that information.
-</p>
-
-<h3>Requirements</h3>
-
-<p>Your application must:</p>
-
-<ol>
-    <li>Create or maintain a collection of data using an array of objects.</li>
-    <li>Define an appropriate TypeScript interface for the data.</li>
-    <li>Display the collection using FlatList.</li>
-    <li>Allow the user to add at least one type of information.</li>
-    <li>Allow the user to remove or modify information.</li>
-    <li>Provide appropriate validation for user input.</li>
-    <li>Save the collection using AsyncStorage.</li>
-    <li>Load previously saved information when the application starts.</li>
-    <li>Provide an appropriate message when no data exists.</li>
-</ol>
-
-<h3>Examples</h3>
-
-<p>
-The information you store should make sense for your application. Examples
-might include:
-</p>
-
-<ul>
-    <li>Fitness App – saved workouts or exercises</li>
-    <li>Recipe App – favorite recipes</li>
-    <li>Travel App – destinations the user wants to visit</li>
-    <li>Student App – assignments or study tasks</li>
-    <li>Budget App – expenses</li>
-    <li>Movie App – favorite or watched movies</li>
-    <li>Shopping App – shopping list items</li>
-</ul>
-
-<h3>Submission Requirements</h3>
-
-<p>Submit:</p>
-
-<ul>
-    <li>Your updated application source code.</li>
-    <li>Screenshots demonstrating your data collection.</li>
-    <li>A screenshot showing the ability to add or modify data.</li>
-    <li>A brief explanation (approximately 1–2 paragraphs) describing what information your application stores and why you selected it.</li>
-</ul>
-
-<hr />
-
-<h2>Discussion Question</h2>
-
-<p>
-Mobile applications can store information locally on the user's device or
-retrieve and store information using an external database or cloud service.
-</p>
-
-<p>
-For your semester application, identify <strong>one type of information</strong>
-that should be stored locally on the user's device and <strong>one type of
-information</strong> that might be better stored remotely.
-</p>
-
-<p>In your response, address the following:</p>
-
-<ul>
-    <li>What information would you store locally?</li>
-    <li>Why would local storage be appropriate?</li>
-    <li>What information might eventually need to be stored remotely?</li>
-    <li>Why would a remote database or service be better for that information?</li>
-</ul>
-
-<p>
-Your initial response should be approximately <strong>150–250 words</strong>.
-After posting your response, reply to at least <strong>one classmate</strong>
-and discuss whether you agree with their choice of local versus remote storage.
-</p>
-
-<hr />
-
-<h2>Module 5 Checklist</h2>
-
-<p>Before moving to the next module, make sure you can:</p>
-
-<ul>
-    <li>✓ Create arrays of TypeScript objects.</li>
-    <li>✓ Display collections using FlatList.</li>
-    <li>✓ Add and remove items from application state.</li>
-    <li>✓ Pass information between application screens.</li>
-    <li>✓ Explain the difference between state and persistent storage.</li>
-    <li>✓ Save data using AsyncStorage.</li>
-    <li>✓ Retrieve and parse saved JSON data.</li>
-    <li>✓ Apply persistent storage to your own mobile application.</li>
-</ul>
-
-<p>
-<strong>Coming Next:</strong> In Module 6, we will expand beyond information
-stored directly on the device and begin working with external data and APIs.
-</p>
-```
+    <p>
+        React Native provides the <strong>FlatList</strong>
