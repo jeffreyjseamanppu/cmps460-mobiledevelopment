@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMPS460 | Module 6 – Working with APIs and External Data</title>
+<style>
+:root{--navy:#17324d;--blue:#245d89;--pale:#edf4f9;--line:#d9e2e9;--ink:#263746}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);line-height:1.65;max-width:1040px;margin:0 auto;padding:25px;background:#fff}header{background:var(--navy);color:white;padding:30px;border-radius:10px}header p{margin-bottom:0}h1{margin:0;font-size:2rem}h2{color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:8px;margin-top:35px}h3{color:var(--blue);margin-top:24px}.tag{font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;color:#dcebf6}nav{padding:14px 20px;background:var(--pale);margin:20px 0;border-radius:8px}nav a{margin-right:16px;display:inline-block;color:var(--blue)}.note{border-left:4px solid var(--blue);padding:12px 18px;background:var(--pale);margin:20px 0}pre{background:#172331;color:#f1f6fa;padding:18px;overflow-x:auto;border-radius:7px;font-size:.9rem;line-height:1.5}code{font-family:Consolas,Monaco,monospace}table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:var(--pale)}a{color:#125c8d}section{scroll-margin-top:15px}footer{border-top:1px solid var(--line);margin-top:40px;padding-top:14px;color:#647383;font-size:.9rem}@media(max-width:600px){body{padding:12px}header{padding:20px}table{font-size:.9rem}pre{font-size:.78rem}}
+</style>
+</head>
+<body>
+<header><div class="tag">CMPS460 • Mobile Application Programming</div><h1>Module 6: Working with APIs and External Data</h1><p>React Native • Expo • TypeScript • REST APIs • JSON • Asynchronous Programming</p></header>
+<nav aria-label="Module sections"><a href="#overview">Overview</a><a href="#objectives">Objectives</a><a href="#resources">Resources</a><a href="#lecture">Lecture</a><a href="#lab">Lab</a><a href="#homework">Homework</a><a href="#discussion">Discussion</a></nav>
+<section id="overview"><h2>Module Overview</h2><p>Modern mobile applications often depend on external services for information such as weather, products, social posts, and account details. In this module, students learn to request information from a REST API, interpret JSON responses, and present remote data in a React Native interface. Students will also practice handling slow networks, unsuccessful responses, and loading states.</p><p><strong>Prerequisites:</strong> Basic React Native components, props, state with <code>useState</code>, lists using <code>FlatList</code>, and an existing Expo/TypeScript project.</p><div class="note"><strong>Module deliverables:</strong> Complete the guided lab, submit the API Integration Homework (100 points), and participate in the discussion (50 points). Follow the due dates posted in the course LMS.</div></section>
+<section id="objectives"><h2>Learning Objectives</h2><p>By the end of this module, students will be able to:</p><ol><li>Describe an application programming interface (API) and the purpose of REST APIs.</li><li>Distinguish between GET, POST, PUT, PATCH, and DELETE HTTP methods.</li><li>Identify endpoints, request headers, status codes, and JSON response structures.</li><li>Use <code>fetch()</code> and <code>async/await</code> in a React Native TypeScript project.</li><li>Define TypeScript interfaces that describe API response objects.</li><li>Display retrieved data with <code>FlatList</code> and appropriate keys.</li><li>Show loading, error, and empty states and allow users to retry or refresh.</li><li>Explain tradeoffs between local storage and data retrieved from an API.</li></ol></section>
+<section id="resources"><h2>Learning Resources</h2><ul><li><a href="https://reactnative.dev/docs/network" target="_blank" rel="noopener">React Native: Networking</a> — using Fetch in mobile apps.</li><li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN: Using the Fetch API</a> — requests, responses, and error handling.</li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank" rel="noopener">MDN: async function</a> — asynchronous JavaScript fundamentals.</li><li><a href="https://www.typescriptlang.org/docs/handbook/2/objects.html" target="_blank" rel="noopener">TypeScript Handbook: Object Types</a> — describing API response data.</li><li><a href="https://jsonplaceholder.typicode.com/guide/" target="_blank" rel="noopener">JSONPlaceholder Guide</a> — free practice API endpoints.</li><li><a href="https://docs.expo.dev/get-started/start-developing/" target="_blank" rel="noopener">Expo: Start Developing</a> — running and testing the project.</li></ul><h3>Suggested Video Learning</h3><p>Use the following video search collections to find current walkthroughs compatible with your installed Expo SDK and React Native version:</p><ul><li><a href="https://www.youtube.com/results?search_query=React+Native+Expo+TypeScript+fetch+API+tutorial" target="_blank" rel="noopener">React Native + Expo + TypeScript API Fetch tutorials</a></li><li><a href="https://www.youtube.com/results?search_query=React+Native+FlatList+API+data+loading+error+tutorial" target="_blank" rel="noopener">FlatList with remote data, loading, and error handling</a></li><li><a href="https://www.youtube.com/results?search_query=JavaScript+REST+API+JSON+async+await+explained" target="_blank" rel="noopener">REST, JSON, and async/await explanations</a></li></ul></section>
+<section id="lecture"><h2>Lecture: APIs and External Data</h2><h3>1. What Is an API?</h3><p>An API is a defined way for software systems to communicate. A mobile application can request information from a remote service without needing direct access to the service's database. A REST API commonly exposes resources through URLs called <strong>endpoints</strong>.</p><p>Example endpoint: <a href="https://jsonplaceholder.typicode.com/posts" target="_blank" rel="noopener"><code>https://jsonplaceholder.typicode.com/posts</code></a>. This endpoint returns sample post objects in JSON format.</p><h3>2. HTTP Methods and Status Codes</h3><table><thead><tr><th>Method</th><th>Typical purpose</th><th>Example</th></tr></thead><tbody><tr><td>GET</td><td>Retrieve data</td><td>Load a list of posts</td></tr><tr><td>POST</td><td>Create a resource</td><td>Submit a new post</td></tr><tr><td>PUT</td><td>Replace a resource</td><td>Replace a saved profile</td></tr><tr><td>PATCH</td><td>Partially update a resource</td><td>Change a display name</td></tr><tr><td>DELETE</td><td>Remove a resource</td><td>Delete a post</td></tr></tbody></table><p>Common HTTP status codes include <strong>200</strong> (OK), <strong>201</strong> (Created), <strong>400</strong> (Bad Request), <strong>401</strong> (Unauthorized), <strong>404</strong> (Not Found), and <strong>500</strong> (Internal Server Error).</p><h3>3. Understanding JSON</h3><p>JSON (JavaScript Object Notation) is a text format for exchanging structured information. A response can contain objects, arrays, strings, numbers, booleans, and null values.</p><pre><code>{
+  "userId": 1,
+  "id": 1,
+  "title": "My first API post",
+  "body": "This content came from a remote API."
+}</code></pre><h3>4. Asynchronous Programming</h3><p>Network requests can take time. <code>async/await</code> allows the application to wait for a request without blocking the user interface. A <code>try/catch/finally</code> structure separates successful results, failures, and cleanup.</p><pre><code>async function loadPosts(): Promise&lt;void&gt; {
+  try {
+    const response = await fetch(
+      'https://jsonplaceholder.typicode.com/posts'
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Unable to load posts:', error);
+  }
+}</code></pre><p><strong>Important:</strong> <code>fetch()</code> does not automatically reject for HTTP errors such as 404 or 500. Check <code>response.ok</code> yourself.</p><h3>5. TypeScript Interfaces</h3><p>Interfaces describe the expected structure of data and help catch mistakes while developing.</p><pre><code>interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}</code></pre><p>TypeScript types do not validate the contents of a response at runtime. In production apps, validate untrusted responses before relying on their structure.</p><h3>6. React Native State and Data Display</h3><p>Use <code>useState</code> to store the returned data and track loading and error conditions. Use <code>useEffect</code> to start a request when a screen first appears. Use <code>FlatList</code> to render collections efficiently. Add a retry button and pull-to-refresh so users can recover from network problems.</p><h3>7. Security and Reliability Considerations</h3><ul><li>Prefer HTTPS endpoints.</li><li>Never embed private API secrets directly in client-side mobile code.</li><li>Handle missing data, timeouts, and offline conditions gracefully.</li><li>Do not assume a successful network response means the data is valid.</li><li>Use appropriate authentication when accessing private resources.</li></ul></section>
+<section id="lab"><h2>Hands-On Lab: Mobile API Data Viewer</h2><p><strong>Goal:</strong> Build an Expo React Native screen that loads posts from JSONPlaceholder and displays them with loading, error, and refresh behavior.</p><h3>Part A — Set Up the Project</h3><ol><li>Open your existing Expo/TypeScript application, or create a new Expo project.</li><li>If creating a new project, run the commands below in a terminal.</li><li>Locate the main screen in your project. For a basic project this may be <code>App.tsx</code>; for an Expo Router project, use the relevant route file, such as <code>app/index.tsx</code> or <code>app/(tabs)/index.tsx</code>.</li></ol><pre><code>npx create-expo-app@latest cmps460-api-lab --template blank-typescript
+cd cmps460-api-lab
+npx expo start</code></pre><h3>Part B — Implement the Screen</h3><p>Replace the main screen contents with this complete example:</p><pre><code>import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Button,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
+export default function App() {
+  const [posts, setPosts] = useState&lt;Post[]&gt;([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState&lt;string | null&gt;(null);
+
+  const fetchPosts = useCallback(async (isRefresh = false) =&gt; {
+    if (isRefresh) setRefreshing(true);
+    else setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        'https://jsonplaceholder.typicode.com/posts'
+      );
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
+      }
+      const data: Post[] = await response.json();
+      if (!Array.isArray(data)) {
+        throw new Error('Unexpected API response');
+      }
+      setPosts(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() =&gt; {
+    void fetchPosts();
+  }, [fetchPosts]);
+
+  return (
+    &lt;SafeAreaView style={styles.container}&gt;
+      &lt;Text style={styles.heading}&gt;API Post Viewer&lt;/Text&gt;
+      {loading ? (
+        &lt;ActivityIndicator size="large" accessibilityLabel="Loading posts" /&gt;
+      ) : error ? (
+        &lt;View&gt;
+          &lt;Text style={styles.error}&gt;{error}&lt;/Text&gt;
+          &lt;Button title="Retry" onPress={() =&gt; void fetchPosts()} /&gt;
+        &lt;/View&gt;
+      ) : (
+        &lt;FlatList
+          data={posts}
+          keyExtractor={(item) =&gt; String(item.id)}
+          renderItem={({ item }) =&gt; (
+            &lt;View style={styles.card}&gt;
+              &lt;Text style={styles.title}&gt;{item.title}&lt;/Text&gt;
+              &lt;Text&gt;{item.body}&lt;/Text&gt;
+            &lt;/View&gt;
+          )}
+          refreshing={refreshing}
+          onRefresh={() =&gt; void fetchPosts(true)}
+          ListEmptyComponent={&lt;Text&gt;No posts available.&lt;/Text&gt;}
+        /&gt;
+      )}
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 18, backgroundColor: '#f5f7fa' },
+  heading: { fontSize: 25, fontWeight: 'bold', marginBottom: 16 },
+  card: { backgroundColor: '#fff', padding: 14, borderRadius: 8,
+          marginBottom: 12 },
+  title: { fontSize: 17, fontWeight: 'bold', marginBottom: 7 },
+  error: { color: '#a51b1b', marginBottom: 12 },
+});</code></pre><h3>Part C — Test and Reflect</h3><ol><li>Run the app in an Android emulator, iOS simulator, or Expo Go as supported by your environment.</li><li>Verify that posts appear with their titles and bodies.</li><li>Pull down on the list to refresh the data.</li><li>Temporarily change the endpoint to an invalid URL or disconnect the device from the network. Confirm that an error message appears.</li><li>Restore the correct endpoint and use Retry.</li><li>Take screenshots showing the loaded list and an error state.</li></ol><p><strong>Lab checkpoint:</strong> Demonstrate a successful GET request, a loading indicator, a rendered list, pull-to-refresh, and a recoverable error state. The lab prepares you for the graded homework assignment.</p></section>
+<section id="homework"><h2>Homework Assignment: Integrate an External API</h2><p><strong>Total: 100 points</strong></p><h3>Scenario</h3><p>Your semester mobile application is ready to become more useful by displaying information from an external source. Choose a free public API that fits your application idea, or use JSONPlaceholder if your project does not yet have a suitable API. Build an API-powered screen that a user can navigate and understand.</p><h3>Requirements</h3><ol><li><strong>API selection:</strong> Identify the API, endpoint URL, data returned, and how it supports your application. Choose an endpoint accessible without exposing a secret key.</li><li><strong>Data retrieval:</strong> Make at least one GET request using <code>fetch()</code> and <code>async/await</code>.</li><li><strong>TypeScript:</strong> Define an interface or type for the retrieved records and use it in component state.</li><li><strong>User interface:</strong> Present at least three meaningful fields from each record using a readable list or equivalent screen. If the API has fewer fields, obtain instructor approval for an alternative.</li><li><strong>Application states:</strong> Include loading, error, and empty states, plus a Retry button or refresh control.</li><li><strong>Integration:</strong> Make the screen part of your existing semester application, or explain why a separate prototype is necessary.</li><li><strong>Documentation:</strong> Provide a README with setup instructions, endpoint details, test steps, and a brief explanation of your design decisions.</li><li><strong>Evidence:</strong> Submit screenshots showing a successful API response and at least one error or recovery state.</li></ol><h3>Submission Instructions</h3><p>Submit one ZIP file or an accessible GitHub repository link through the LMS, along with your README and screenshots. Do not include <code>node_modules</code>, private API credentials, or unrelated generated build files. Include any commands needed to install dependencies and launch the app.</p><h3>Grading Rubric — 100 Points</h3><table><thead><tr><th>Criterion</th><th>Points</th></tr></thead><tbody><tr><td>API selection, endpoint explanation, and relevance to project</td><td>10</td></tr><tr><td>Functional GET request with async/await and response checks</td><td>20</td></tr><tr><td>Correct TypeScript data modeling and state management</td><td>15</td></tr><tr><td>Usable UI displaying meaningful API data</td><td>20</td></tr><tr><td>Loading, error, empty, and refresh/retry behavior</td><td>20</td></tr><tr><td>README, screenshots, and reproducible submission</td><td>15</td></tr><tr><th>Total</th><th>100</th></tr></tbody></table><h3>Optional Challenge (Not Required)</h3><p>Add a detail screen for a selected item, a search/filter feature, or a second related endpoint. Describe the feature in your README.</p><h3>Academic Integrity</h3><p>Students may consult official documentation and instructional resources, but must understand and be able to explain the code they submit. Clearly identify any external code or AI-assisted contributions according to course policy.</p></section>
+<section id="discussion"><h2>Discussion: Local Storage vs. Cloud-Based API Data</h2><p><strong>Total: 50 points</strong></p><h3>Discussion Prompt</h3><p>Mobile applications can store data directly on a device or retrieve it from a remote API. Both approaches have benefits and limitations. Imagine you are designing a mobile app that tracks information such as personal tasks, inventory, class assignments, or event registrations.</p><p>In your initial post, address <strong>all</strong> of the following questions:</p><ol><li>What are two advantages and two disadvantages of retrieving information from an external API instead of storing it only on the device?</li><li>How do internet connectivity, performance, privacy, and data consistency affect your decision?</li><li>For your semester mobile application, what information would you store locally and what information would you retrieve remotely? Explain your reasoning with a specific example.</li><li>How should your app respond if an API is unavailable or returns an error?</li></ol><h3>Participation Requirements</h3><ul><li><strong>Initial post (30 points):</strong> Write approximately 250–350 words, answer all four questions, and include at least one concrete mobile application example.</li><li><strong>First peer response (10 points):</strong> Write approximately 75–100 words. Identify a useful insight in a classmate's post and add a thoughtful question, counterexample, or recommendation.</li><li><strong>Second peer response (10 points):</strong> Respond to a different classmate in approximately 75–100 words, advancing the discussion with an additional technical consideration or practical example.</li></ul><p>Responses such as “I agree” or “Good post” without substantive explanation do not earn full credit. Use respectful, professional language and cite outside sources when appropriate.</p><h3>Discussion Rubric — 50 Points</h3><table><thead><tr><th>Criterion</th><th>Points</th></tr></thead><tbody><tr><td>Initial post: complete answers, accurate technical reasoning, and relevant example</td><td>30</td></tr><tr><td>First peer response: substantive engagement and meaningful contribution</td><td>10</td></tr><tr><td>Second peer response: substantive engagement with a different classmate</td><td>10</td></tr><tr><th>Total</th><th>50</th></tr></tbody></table><p><strong>Due dates:</strong> See the LMS for the initial post, peer response, and assignment deadlines.</p></section>
+<footer>CMPS460 • Module 6 • Working with APIs and External Data</footer>
+</body></html>
