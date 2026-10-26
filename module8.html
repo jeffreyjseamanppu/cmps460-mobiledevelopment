@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CMPS460 Module 8 – Navigation and Mobile UX</title>
+<style>
+:root{--navy:#17324d;--blue:#176a9a;--light:#eef5f9;--line:#d7e1e8}*{box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;line-height:1.65;color:#253746;max-width:1050px;margin:auto;padding:24px;background:#fff}header{background:var(--navy);color:#fff;padding:30px;border-radius:10px}h1{margin:0 0 8px}h2{color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:7px;margin-top:34px}h3{color:var(--blue)}a{color:#075e93}section{margin:24px 0}.note{background:var(--light);padding:16px 20px;border-left:4px solid var(--blue);border-radius:5px}.task{border:1px solid var(--line);border-radius:8px;padding:20px;margin:20px 0}pre{background:#142333;color:#f5f8fb;padding:18px;overflow-x:auto;border-radius:8px;font-size:.92rem}code{font-family:Consolas,Monaco,monospace}table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}th{background:var(--light)}footer{margin-top:40px;color:#596b78;font-size:.9rem}@media(max-width:650px){body{padding:12px}header{padding:20px}pre{font-size:.78rem}}
+</style>
+</head>
+<body>
+<header><h1>Module 8: Mobile Application Navigation and User Experience (UX)</h1><p><strong>CMPS460 – Mobile Application Programming</strong><br>React Native + TypeScript | Suggested duration: One week | Total: 250 points</p></header>
+<section><h2>Module Overview</h2><p>In Module 7, you learned how to preserve application data locally. In Module 8, you will connect that functionality to a more complete mobile experience by creating multiple screens, moving between screens, passing parameters, validating forms, and designing interfaces that are easy to use.</p><div class="note"><strong>Outcome:</strong> By the end of the module, you will have a multi-screen Personal Organizer application with navigation, a task-entry form, and persistent task storage.</div></section>
+<section><h2>Learning Objectives</h2><p>After completing this module, students will be able to:</p><ol><li>Explain the differences between stack and tab navigation in mobile applications.</li><li>Configure React Navigation in a React Native TypeScript project.</li><li>Create multiple screens and navigate between them.</li><li>Pass typed parameters between screens and display the results.</li><li>Build reusable UI components and forms with basic input validation.</li><li>Apply mobile UX principles, including accessibility, clear feedback, and consistent layout.</li><li>Combine navigation with persistent storage from Module 7.</li></ol></section>
+<section><h2>Learning Resources</h2><ul><li><a href="https://reactnavigation.org/docs/getting-started/">React Navigation: Getting Started</a> – installation and initial setup.</li><li><a href="https://reactnavigation.org/docs/native-stack-navigator/">Native Stack Navigator</a> – screen-to-screen navigation.</li><li><a href="https://reactnavigation.org/docs/bottom-tab-navigator/">Bottom Tabs Navigator</a> – tab-based app organization.</li><li><a href="https://reactnavigation.org/docs/typescript/">TypeScript with React Navigation</a> – typing navigation parameters.</li><li><a href="https://reactnative.dev/docs/accessibility">React Native Accessibility</a> – labels, hints, and accessible controls.</li><li><a href="https://reactnative.dev/docs/textinput">React Native TextInput</a> – user input and forms.</li><li><a href="https://react-native-async-storage.github.io/async-storage/docs/usage/">AsyncStorage Usage</a> – persistent storage review.</li></ul><h3>Video Learning</h3><p>Watch relevant tutorials before beginning the lab. These links lead to topic-specific video results so you can choose an up-to-date tutorial matching your project setup.</p><ul><li><a href="https://www.youtube.com/results?search_query=React+Navigation+7+React+Native+TypeScript+native+stack+tutorial">React Navigation + TypeScript: Stack Navigation</a></li><li><a href="https://www.youtube.com/results?search_query=React+Native+bottom+tab+navigation+tutorial+TypeScript">React Native: Bottom Tab Navigation</a></li><li><a href="https://www.youtube.com/results?search_query=React+Native+form+validation+TextInput+TypeScript+tutorial">React Native: Forms and Validation</a></li><li><a href="https://www.youtube.com/results?search_query=React+Native+accessibility+mobile+UX+best+practices">React Native: Accessibility and Mobile UX</a></li></ul></section>
+<section><h2>Lecture: Navigation and Mobile UX</h2><h3>1. Navigation Patterns</h3><p><strong>Stack navigation</strong> follows a sequence of screens (for example, Home → Task Details → Edit Task). A back action returns to the previous screen. <strong>Tab navigation</strong> provides direct access to major areas of an application, such as Home, Tasks, and Settings. Many production apps combine both approaches.</p><h3>2. Screen Parameters and Type Safety</h3><p>Navigation parameters allow one screen to identify a selected record. TypeScript can define valid routes and the data each route accepts, reducing runtime errors. Avoid passing entire large objects when a stable record ID is sufficient.</p><h3>3. Reusable Components</h3><p>Buttons, headers, input fields, and task cards should share consistent styling and behavior. Reusable components reduce duplicate code and improve maintainability.</p><h3>4. Form Validation and Feedback</h3><p>Validate required inputs, show clear error messages, and provide feedback after saving. Do not silently discard user entries. Disable or guard against duplicate submissions when appropriate.</p><h3>5. User Experience and Accessibility</h3><p>Good UX emphasizes clear navigation, readable typography, adequate touch targets, meaningful labels, sufficient contrast, predictable back behavior, and useful empty states. Test with a screen reader where possible and avoid relying on color alone to communicate status.</p><h3>6. Persistent Data Across Screens</h3><p>Navigation controls where users go; application state controls what users see. Store tasks in shared state or reload them when a screen receives focus. Save changes to AsyncStorage and handle failures gracefully.</p></section>
+<section><h2>Guided Setup: React Navigation</h2><p>Use the React Native project from Module 7 or create a new Expo TypeScript project. In the project folder, run:</p><pre><code>npx create-expo-app@latest module8-organizer --template blank-typescript
+cd module8-organizer
+npm install @react-navigation/native @react-navigation/native-stack
+npx expo install react-native-screens react-native-safe-area-context @react-native-async-storage/async-storage
+npx expo start</code></pre><p>If you are reusing an existing project, skip the create-project commands. The example below uses a native stack; the optional tab navigation extension requires installing <code>@react-navigation/bottom-tabs</code>.</p><h3>Example: Typed Navigation with Three Screens</h3><p>Replace <code>App.tsx</code> with the following starting example. It demonstrates navigation and parameter passing; students will add the form and persistent storage during the lab.</p><pre><code>import React from 'react';
+import { Button, SafeAreaView, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  Home: undefined;
+  Tasks: undefined;
+  TaskDetails: { taskId: string; title: string };
+};
+const Stack = createNativeStackNavigator&lt;RootStackParamList&gt;();
+
+type HomeProps = NativeStackScreenProps&lt;RootStackParamList, 'Home'&gt;;
+function HomeScreen({ navigation }: HomeProps) {
+  return (
+    &lt;SafeAreaView style={{ flex: 1, padding: 24 }}&gt;
+      &lt;Text style={{ fontSize: 26, marginBottom: 20 }}&gt;Personal Organizer&lt;/Text&gt;
+      &lt;Button title="View Tasks" onPress={() =&gt; navigation.navigate('Tasks')} /&gt;
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+type TasksProps = NativeStackScreenProps&lt;RootStackParamList, 'Tasks'&gt;;
+function TasksScreen({ navigation }: TasksProps) {
+  return (
+    &lt;View style={{ flex: 1, padding: 24 }}&gt;
+      &lt;Text style={{ fontSize: 22, marginBottom: 20 }}&gt;My Tasks&lt;/Text&gt;
+      &lt;Button title="Open Sample Task" onPress={() =&gt;
+        navigation.navigate('TaskDetails', { taskId: '1', title: 'Study React Navigation' })
+      } /&gt;
+    &lt;/View&gt;
+  );
+}
+
+type DetailsProps = NativeStackScreenProps&lt;RootStackParamList, 'TaskDetails'&gt;;
+function TaskDetailsScreen({ route }: DetailsProps) {
+  return (
+    &lt;View style={{ flex: 1, padding: 24 }}&gt;
+      &lt;Text style={{ fontSize: 22 }}&gt;{route.params.title}&lt;/Text&gt;
+      &lt;Text&gt;Task ID: {route.params.taskId}&lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}
+
+export default function App() {
+  return (
+    &lt;NavigationContainer&gt;
+      &lt;Stack.Navigator&gt;
+        &lt;Stack.Screen name="Home" component={HomeScreen} /&gt;
+        &lt;Stack.Screen name="Tasks" component={TasksScreen} /&gt;
+        &lt;Stack.Screen name="TaskDetails" component={TaskDetailsScreen} /&gt;
+      &lt;/Stack.Navigator&gt;
+    &lt;/NavigationContainer&gt;
+  );
+}</code></pre><div class="note"><strong>Important:</strong> This sample uses React Navigation with an Expo blank TypeScript project, not Expo Router. If your existing project uses Expo Router, use its file-based navigation approach instead of mixing both systems.</div></section>
+<section class="task"><h2>Lab: Build a Three-Screen Task Manager (100 Points)</h2><p><strong>Goal:</strong> Practice navigation, typed route parameters, and a task-entry form.</p><h3>Requirements</h3><ol><li>Create a React Native TypeScript application using the guided setup or your Module 7 project.</li><li>Implement at least three screens: <strong>Home</strong>, <strong>Tasks</strong>, and <strong>Task Details</strong>.</li><li>Add a task-entry form on the Tasks screen or on an additional Add Task screen.</li><li>Validate that a task title is not blank or whitespace-only; show a visible error message when invalid.</li><li>Display newly added tasks in a list and allow users to open a task detail screen.</li><li>Pass a task ID as a typed navigation parameter and use it to identify the correct task.</li><li>Provide an empty-state message when there are no tasks.</li><li>Demonstrate successful back navigation and readable, consistent screen layouts.</li></ol><h3>Submission</h3><p>Submit your GitHub repository URL, screenshots of the three screens, and a brief README explaining how to install and run the project.</p><h3>Lab Rubric</h3><table><tr><th>Criteria</th><th>Points</th></tr><tr><td>Three functional screens and navigation</td><td>30</td></tr><tr><td>Typed parameters and correct task details</td><td>20</td></tr><tr><td>Task form and input validation</td><td>20</td></tr><tr><td>Usability, accessibility, and empty state</td><td>15</td></tr><tr><td>GitHub repository, screenshots, and README</td><td>15</td></tr><tr><th>Total</th><th>100</th></tr></table></section>
+<section class="task"><h2>Assignment: Personal Mobile Organizer (100 Points)</h2><p><strong>Goal:</strong> Extend your lab into a polished application that combines Module 7 persistence with Module 8 navigation and UX principles.</p><h3>Functional Requirements</h3><ol><li>Implement Home, Tasks, Task Details, and Settings screens (at least four screens total).</li><li>Provide stack navigation; add bottom tabs for at least two top-level areas (such as Tasks and Settings).</li><li>Support adding, viewing, editing, completing, and deleting tasks.</li><li>Use AsyncStorage to save tasks and reload them after closing and reopening the app.</li><li>Validate required fields and confirm destructive actions before deleting tasks.</li><li>Show clear feedback for save success or failure, empty lists, and loading state.</li><li>Build at least one reusable component, such as a TaskCard or FormField.</li><li>Apply accessibility labels to interactive controls and maintain consistent visual hierarchy.</li><li>Use TypeScript interfaces or types for tasks and navigation parameters.</li></ol><h3>Deliverables</h3><ul><li>GitHub repository URL with complete source code and a meaningful README.</li><li>At least four screenshots demonstrating the app's major screens.</li><li>A <strong>5–8 minute video presentation</strong> demonstrating navigation, CRUD operations, validation, and data persistence after restart.</li><li>A 200–300 word reflection describing two UX decisions, one challenge, and how you resolved it.</li></ul><h3>Assignment Rubric</h3><table><tr><th>Criteria</th><th>Points</th></tr><tr><td>Navigation architecture and functional screens</td><td>20</td></tr><tr><td>Task CRUD operations and validation</td><td>25</td></tr><tr><td>Reliable AsyncStorage persistence</td><td>20</td></tr><tr><td>UX, accessibility, and reusable components</td><td>15</td></tr><tr><td>Code organization and TypeScript use</td><td>10</td></tr><tr><td>Video, screenshots, README, and reflection</td><td>10</td></tr><tr><th>Total</th><th>100</th></tr></table></section>
+<section class="task"><h2>Discussion: What Makes a Great Mobile User Experience? (50 Points)</h2><p><strong>Prompt:</strong> Choose a mobile application you regularly use. Evaluate how its navigation and interface help or hinder users. Discuss whether stack navigation, tabs, or another pattern is most appropriate. Identify one accessibility or usability issue and propose a concrete improvement. Connect at least one observation to your Personal Organizer project.</p><h3>Participation Requirements</h3><ul><li><strong>Initial post:</strong> At least 250 words, supported by a specific example from the chosen app and at least one course resource.</li><li><strong>Peer replies:</strong> Respond substantively to at least two classmates (at least 100 words per reply). Offer constructive design feedback or a different navigation approach.</li><li>Maintain a professional and respectful tone.</li></ul><h3>Discussion Rubric</h3><table><tr><th>Criteria</th><th>Points</th></tr><tr><td>Initial post: analysis and concrete examples</td><td>20</td></tr><tr><td>Application of navigation/UX concepts and resource</td><td>10</td></tr><tr><td>First substantive peer reply</td><td>10</td></tr><tr><td>Second substantive peer reply</td><td>10</td></tr><tr><th>Total</th><th>50</th></tr></table></section>
+<section><h2>Module Completion Checklist</h2><ul><li>Review lecture and learning resources.</li><li>Watch the navigation, forms, and UX videos.</li><li>Complete and submit the 100-point lab.</li><li>Complete and submit the 100-point Personal Organizer assignment and video.</li><li>Publish the initial discussion and respond to two classmates (50 points).</li><li>Confirm that GitHub links are accessible and all required files are committed.</li></ul><p><strong>Module 8 Total: 250 points.</strong> Refer to your learning management system for official due dates.</p></section>
+<footer>CMPS460 – Mobile Application Programming | Module 8</footer>
+</body></html>
