@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mobile Development | API Integration and Local Storage</title><style>body{font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif;background:#f2f5f9;color:#203047;margin:0}header{background:linear-gradient(120deg,#142c50,#245c82);color:white;padding:44px max(24px,calc((100vw - 1000px)/2))}header h1{margin:0;font-size:2.3rem}main{max-width:1000px;margin:30px auto;padding:0 20px}section{background:white;border-radius:12px;padding:26px 30px;margin:20px 0;box-shadow:0 2px 12px #17325412}h2{color:#174c78;border-bottom:2px solid #dce8f3;padding-bottom:8px}h3{color:#22567a}a{color:#1466aa}pre{background:#122339;color:#edf5ff;overflow-x:auto;padding:18px;border-radius:8px;font-size:14px;line-height:1.55}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.note{border-left:4px solid #2d84b8;background:#eff7fd;padding:14px 18px;border-radius:5px}.warning{border-left:4px solid #d38a1f;background:#fff8eb;padding:14px 18px;border-radius:5px}li{margin-bottom:7px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.tile{background:#f4f8fc;border-radius:8px;padding:16px}.video{aspect-ratio:16/9;width:100%;border:0;border-radius:8px}.small{font-size:14px;color:#53677c}footer{text-align:center;padding:24px;color:#64748b}@media(max-width:600px){header{padding:30px 20px}header h1{font-size:1.8rem}section{padding:20px}}</style></head><body><header><p>Mobile Application Development • React Native + Expo</p><h1>Module: API Integration and Local Data Storage</h1><p>Fetch remote data, manage loading states, and persist favorites on a mobile device.</p></header><main>
+<section><h2>Module Overview</h2><p>Modern mobile apps frequently combine remote data from web APIs with information saved on the user's device. In this module, students create an NFL Teams &amp; Players app that retrieves team information from a sample API and lets users save favorite teams locally.</p><p><strong>Suggested duration:</strong> 1 week • <strong>Prerequisites:</strong> React Native components, props, state, basic navigation, JavaScript async functions.</p><h3>Learning Objectives</h3><ol><li>Explain APIs, JSON, HTTP GET requests, and asynchronous data retrieval.</li><li>Use <code>fetch()</code> and <code>useEffect()</code> in React Native.</li><li>Display remote data with <code>FlatList</code> and handle loading and error states.</li><li>Store and retrieve JSON data using Expo-compatible AsyncStorage.</li><li>Discuss mobile privacy, offline behavior, and secure API practices.</li></ol></section>
+<section><h2>Learning Resources</h2><div class="grid"><div class="tile"><h3>React Native Documentation</h3><p>Components, networking, FlatList, and state management.</p><a href="https://reactnative.dev/docs/network" target="_blank" rel="noopener">Networking guide</a><br><a href="https://reactnative.dev/docs/flatlist" target="_blank" rel="noopener">FlatList reference</a></div><div class="tile"><h3>Expo Documentation</h3><p>Start and run an Expo project on iOS, Android, or the web.</p><a href="https://docs.expo.dev/get-started/create-a-project/" target="_blank" rel="noopener">Create a project</a></div><div class="tile"><h3>AsyncStorage</h3><p>Persist small, non-sensitive key-value data between app launches.</p><a href="https://react-native-async-storage.github.io/async-storage/docs/usage/" target="_blank" rel="noopener">Usage documentation</a></div><div class="tile"><h3>JavaScript Reference</h3><p>Promises, async/await, and JSON parsing.</p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function" target="_blank" rel="noopener">Async functions</a></div></div><div class="warning"><strong>Security reminder:</strong> AsyncStorage is not encrypted. Do not store passwords, authentication tokens, or other sensitive information in it. Use secure storage for secrets and keep privileged API keys on a backend.</div></section>
+<section><h2>Video Learning</h2><p>Use these curated video search links to select current demonstrations that match the student's Expo SDK and React Native version. Video titles and availability can change.</p><ol><li><a href="https://www.youtube.com/results?search_query=Expo+React+Native+fetch+API+useEffect+tutorial" target="_blank" rel="noopener">React Native + Expo: Fetching API Data with useEffect</a></li><li><a href="https://www.youtube.com/results?search_query=React+Native+FlatList+loading+error+tutorial" target="_blank" rel="noopener">React Native FlatList, Loading Indicators, and Error Handling</a></li><li><a href="https://www.youtube.com/results?search_query=Expo+AsyncStorage+React+Native+favorites+tutorial" target="_blank" rel="noopener">Saving Favorites with AsyncStorage</a></li><li><a href="https://www.youtube.com/results?search_query=React+Native+Expo+REST+API+project+tutorial" target="_blank" rel="noopener">Building a Complete REST API Mobile App</a></li></ol><p class="small">Instructor tip: Add your own recorded walkthrough alongside these resources to demonstrate the exact course starter project.</p></section>
+<section><h2>Lesson 1: Understanding APIs and JSON</h2><p>An <strong>API</strong> allows a mobile app to request data from another application. A REST-style API often responds with <strong>JSON</strong>. A GET request retrieves information without changing server-side data.</p><h3>Example API Response</h3><pre><code>{
+  "teams": [
+    { "id": "PIT", "name": "Pittsburgh Steelers", "city": "Pittsburgh", "conference": "AFC" },
+    { "id": "PHI", "name": "Philadelphia Eagles", "city": "Philadelphia", "conference": "NFC" },
+    { "id": "BUF", "name": "Buffalo Bills", "city": "Buffalo", "conference": "AFC" }
+  ]
+}</code></pre><p>In a production application, this JSON would come from an HTTP endpoint. In this module, students first use a local JSON file so the exercise works without an API account or paid subscription.</p></section>
+<section><h2>Lesson 2: Create the Expo Project</h2><p>Install Node.js LTS and Visual Studio Code. Install Expo Go on a compatible mobile device, or use an emulator.</p><pre><code>npx create-expo-app@latest NFLMobile --template blank
+cd NFLMobile
+npx expo install @react-native-async-storage/async-storage
+npx expo start</code></pre><p>Open <code>App.js</code> in VS Code. Create a <code>data</code> folder and add <code>teams.json</code> containing the sample JSON from Lesson 1.</p><div class="note">If a course project uses Expo Router or TypeScript instead of the blank JavaScript template, adapt the file location and extension accordingly.</div></section>
+<section><h2>Lesson 3: Display NFL Teams</h2><p>The following starter app loads the sample JSON and displays it in a scrollable list. The simulated asynchronous operation lets students practice the same loading-state pattern used with real APIs.</p><pre><code>import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, SafeAreaView,
+  StyleSheet, Text, View } from 'react-native';
+import sampleData from './data/teams.json';
+
+export default function App() {
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() =&gt; {
+    async function loadTeams() {
+      try {
+        setTeams(sampleData.teams);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadTeams();
+  }, []);
+
+  if (loading) return &lt;ActivityIndicator size="large" /&gt;;
+
+  return (
+    &lt;SafeAreaView style={styles.container}&gt;
+      &lt;Text style={styles.heading}&gt;NFL Teams&lt;/Text&gt;
+      &lt;FlatList
+        data={teams}
+        keyExtractor={(team) =&gt; team.id}
+        renderItem={({ item }) =&gt; (
+          &lt;View style={styles.card}&gt;
+            &lt;Text style={styles.team}&gt;{item.name}&lt;/Text&gt;
+            &lt;Text&gt;{item.city} • {item.conference}&lt;/Text&gt;
+          &lt;/View&gt;
+        )}
+      /&gt;
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, paddingTop: 55 },
+  heading: { fontSize: 28, fontWeight: 'bold', marginBottom: 16 },
+  card: { padding: 16, backgroundColor: '#eaf1f8',
+    borderRadius: 10, marginBottom: 10 },
+  team: { fontSize: 18, fontWeight: '600' }
+});</code></pre></section>
+<section><h2>Lesson 4: Replace Local JSON with an API</h2><p>Once the starter app works, students can switch to an instructor-provided API endpoint that returns the same <code>{ "teams": [...] }</code> structure. Replace the <code>loadTeams</code> function and add an error state:</p><pre><code>const [error, setError] = useState('');
+
+async function loadTeams() {
+  setLoading(true);
+  setError('');
+  try {
+    const response = await fetch('https://YOUR-API.example/teams');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    if (!Array.isArray(data.teams)) {
+      throw new Error('Invalid API response');
+    }
+    setTeams(data.teams);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+}</code></pre><p>Then add the following before the main return statement:</p><pre><code>if (loading) return &lt;ActivityIndicator size="large" /&gt;;
+if (error) return &lt;Text accessibilityRole="alert"&gt;Error: {error}&lt;/Text&gt;;</code></pre><p class="warning"><strong>Important:</strong> The URL is a placeholder, not a live API. Use an instructor-hosted endpoint or another documented JSON endpoint that permits educational use. Do not put private API keys in mobile app source code.</p></section>
+<section><h2>Lesson 5: Save Favorite Teams with AsyncStorage</h2><p>Add these imports:</p><pre><code>import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native';</code></pre><p>Inside <code>App()</code>, add the following state and functions:</p><pre><code>const [favorites, setFavorites] = useState([]);
+
+useEffect(() =&gt; {
+  async function restoreFavorites() {
+    try {
+      const saved = await AsyncStorage.getItem('favoriteTeams');
+      if (saved) setFavorites(JSON.parse(saved));
+    } catch (err) {
+      console.warn('Could not restore favorites', err);
+    }
+  }
+  restoreFavorites();
+}, []);
+
+async function toggleFavorite(id) {
+  const next = favorites.includes(id)
+    ? favorites.filter((value) =&gt; value !== id)
+    : [...favorites, id];
+  try {
+    await AsyncStorage.setItem('favoriteTeams', JSON.stringify(next));
+    setFavorites(next);
+  } catch (err) {
+    console.warn('Could not save favorites', err);
+  }
+}</code></pre><p>Inside the existing <code>renderItem</code> card, after the team details, add:</p><pre><code>&lt;Button
+  title={favorites.includes(item.id) ? 'Remove Favorite' : 'Add Favorite'}
+  onPress={() =&gt; toggleFavorite(item.id)}
+/&gt;</code></pre><p>Close and reopen the app to verify favorites persist. This is a learning example; production apps should also consider concurrent updates, validation of stored data, and better user-facing error messages.</p></section>
+<section><h2>In-Class Lab: NFL Team Explorer</h2><p><strong>Time:</strong> 40–50 minutes</p><ol><li>Create and run the Expo project.</li><li>Populate <code>teams.json</code> with at least eight NFL teams.</li><li>Render each team using <code>FlatList</code>.</li><li>Add a button to favorite or unfavorite a team.</li><li>Confirm favorites survive an app restart.</li><li>Demonstrate the loading indicator and explain how the code would change for an HTTP API.</li></ol><p><strong>Lab submission:</strong> A screenshot of the running app and a brief explanation of <code>useEffect</code>, <code>FlatList</code>, and <code>AsyncStorage</code>.</p></section>
+<section><h2>Discussion Board</h2><h3>Topic: Online Data vs. Offline Data in Mobile Apps</h3><p>Imagine you are developing an NFL app that displays teams, players, schedules, and favorite teams. Some data changes frequently, while other data should remain accessible without internet service.</p><p><strong>Initial post (200–300 words):</strong> Which information would you retrieve from an API, and which would you save locally? Explain how your app should behave when the network is unavailable, how you would communicate errors to users, and one privacy or security risk related to mobile data storage.</p><p><strong>Peer replies:</strong> Respond substantively to two classmates (75–100 words each), offering a specific improvement or discussing a tradeoff in their proposed design.</p></section>
+<section><h2>Homework Assignment: NFL Teams &amp; Players Mobile App</h2><p><strong>Goal:</strong> Build an interactive React Native application using Expo that combines structured data, reusable components, and persistent local storage.</p><h3>Requirements</h3><ol><li><strong>Project setup:</strong> Create an Expo project and include clear run instructions.</li><li><strong>Team list:</strong> Display at least 10 NFL teams using <code>FlatList</code>. Each entry must show the name, city, and conference.</li><li><strong>Player details:</strong> Include at least two sample players per team, each with a name, position, and jersey number. Selecting a team must reveal its players.</li><li><strong>Search:</strong> Implement a text field to filter teams by name or city.</li><li><strong>Favorites:</strong> Allow users to add and remove favorite teams; persist selections with AsyncStorage.</li><li><strong>Data handling:</strong> Use a local JSON dataset or an approved working API. Explain your data source. If using an API, implement loading and error handling.</li><li><strong>User experience:</strong> Provide readable styling, touch-friendly controls, and an empty-state message for searches with no matches.</li><li><strong>Reflection:</strong> Write 150–250 words explaining how the app uses state, how data is loaded, how favorites persist, and what would be required to use a live API.</li></ol><h3>Submission</h3><ul><li>GitHub repository URL with complete source code and a <code>README.md</code>.</li><li>Three screenshots: team list, player details, and favorites/search.</li><li>A 2–4 minute screen recording demonstrating the app, including persistence after restarting.</li><li>Written reflection in the README or as a separate document.</li></ul><h3>Grading Rubric (100 points)</h3><div class="grid"><div class="tile"><strong>20 points</strong><p>Project setup, code organization, and documentation</p></div><div class="tile"><strong>25 points</strong><p>Team list, player details, and accurate data display</p></div><div class="tile"><strong>15 points</strong><p>Functional team search and empty state</p></div><div class="tile"><strong>20 points</strong><p>Favorites and reliable persistence</p></div><div class="tile"><strong>10 points</strong><p>Mobile usability, styling, and error handling as applicable</p></div><div class="tile"><strong>10 points</strong><p>Reflection, screenshots, and demonstration</p></div></div><p class="note"><strong>Academic integrity:</strong> You may consult documentation and AI tools, but you must understand and be able to explain your code. Cite external code or AI assistance in your README. Do not submit untested code.</p></section>
+<section><h2>Instructor Notes and Next Steps</h2><p><strong>Suggested class flow:</strong> 15-minute API/JSON overview; 20-minute instructor demo; 45-minute guided lab; 10-minute discussion of offline storage and security.</p><p><strong>Next module suggestion:</strong> Mobile Device Features — camera, location, permissions, and notifications using Expo.</p></section></main><footer>Mobile Development • React Native / Expo • Course Learning Module</footer></body></html>
