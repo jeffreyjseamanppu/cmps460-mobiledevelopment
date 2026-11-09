@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mobile Development | Camera, GPS & Permissions</title><style>:root{--navy:#14263d;--blue:#1769aa;--light:#eef5fb;--ink:#223247}*{box-sizing:border-box}body{margin:0;font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:#f6f8fb}header{background:linear-gradient(120deg,#14263d,#1769aa);color:white;padding:48px max(24px,calc((100% - 1000px)/2))}header h1{font-size:2.3rem;line-height:1.2;margin:8px 0}header p{max-width:760px}main{max-width:1000px;margin:auto;padding:24px}nav,.panel{background:white;border:1px solid #dce5ee;border-radius:12px;padding:24px;margin:18px 0;box-shadow:0 3px 12px #1734510a}nav a{display:inline-block;margin:5px 12px 5px 0;color:var(--blue)}h2{color:var(--navy);border-bottom:2px solid #e1eaf2;padding-bottom:8px}h3{color:#14558b}a{color:#1167a8}pre{background:#14263d;color:#e8f4ff;overflow:auto;border-radius:8px;padding:18px;font-size:13px;line-height:1.5}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}p code,li code{background:#e9f0f6;padding:2px 5px;border-radius:4px}aside{border-left:4px solid #e5a33b;background:#fff8e9;padding:12px 18px;margin:15px 0}.tag{display:inline-block;background:#d7eaff;color:#144a77;padding:4px 10px;border-radius:20px;font-weight:700;font-size:.85rem}table{border-collapse:collapse;width:100%}th,td{padding:10px;border:1px solid #dce5ee;text-align:left}th{background:#eaf3fa}footer{text-align:center;color:#536478;padding:20px}@media(max-width:600px){header{padding:30px 20px}header h1{font-size:1.7rem}main{padding:12px}.panel{padding:18px}}</style></head><body>
+<header><span class="tag">Mobile Development • React Native + Expo</span><h1>Mobile Device Features: Camera, GPS & Permissions</h1><p>Build a Location Journal app that captures photographs, reads GPS coordinates with permission, and saves journal entries on the device.</p><p><strong>Duration:</strong> 1 week &nbsp; | &nbsp; <strong>Prerequisites:</strong> React Native components, state, basic navigation, and asynchronous JavaScript</p></header>
+<main><nav aria-label="Module navigation"><strong>Jump to:</strong> <a href="#objectives">Objectives</a><a href="#resources">Resources & videos</a><a href="#setup">Setup</a><a href="#lesson">Tutorial</a><a href="#lab">Lab</a><a href="#discussion">Discussion</a><a href="#assignment">Assignment</a><a href="#rubric">Rubric</a></nav>
+<section class="panel" id="objectives"><h2>1. Learning Objectives</h2><p>By the end of this module, students will be able to:</p><ol><li>Explain how Expo exposes device hardware capabilities to React Native apps.</li><li>Install and configure camera, location, and local storage libraries.</li><li>Request camera and foreground-location permissions and respond to denial.</li><li>Capture a photograph and display its URI.</li><li>Retrieve GPS latitude and longitude and handle loading/error states.</li><li>Persist and restore journal entries using AsyncStorage.</li><li>Discuss privacy, consent, and responsible handling of location data.</li></ol></section>
+<section class="panel" id="resources"><h2>2. Learning Resources and Videos</h2><h3>Required reading</h3><ul><li><a href="https://docs.expo.dev/versions/latest/sdk/camera/" target="_blank" rel="noopener">Expo Camera documentation</a> — CameraView, permission hooks, and takePictureAsync.</li><li><a href="https://docs.expo.dev/versions/latest/sdk/location/" target="_blank" rel="noopener">Expo Location documentation</a> — foreground permission and current position.</li><li><a href="https://react-native-async-storage.github.io/async-storage/docs/usage/" target="_blank" rel="noopener">AsyncStorage usage guide</a> — JSON serialization and persistence.</li><li><a href="https://docs.expo.dev/get-started/start-developing/" target="_blank" rel="noopener">Expo: Start developing</a> — launching apps on a device.</li><li><a href="https://docs.expo.dev/versions/latest/sdk/file-system/" target="_blank" rel="noopener">Expo FileSystem documentation</a> — retaining captured images beyond temporary camera storage.</li></ul><h3>Video learning</h3><p>Use these official video libraries and searches to locate current demonstrations for your installed Expo SDK. Preview the selected video before class because APIs can change.</p><ol><li><a href="https://www.youtube.com/@expo-dev/videos" target="_blank" rel="noopener">Expo official video library</a> — Expo development workflow.</li><li><a href="https://www.youtube.com/results?search_query=expo+camera+CameraView+React+Native+tutorial" target="_blank" rel="noopener">CameraView tutorial videos</a> — permissions, preview, and photo capture.</li><li><a href="https://www.youtube.com/results?search_query=expo+location+foreground+permissions+React+Native" target="_blank" rel="noopener">Expo Location tutorial videos</a> — requesting GPS location.</li><li><a href="https://www.youtube.com/results?search_query=React+Native+AsyncStorage+Expo+tutorial" target="_blank" rel="noopener">AsyncStorage tutorial videos</a> — saving and restoring local data.</li></ol></section>
+<section class="panel" id="setup"><h2>3. Project Setup</h2><p>Install Node.js LTS and Visual Studio Code. Install Expo Go on a compatible physical phone, or configure an Android/iOS simulator. In the VS Code terminal:</p><pre><code>npx create-expo-app@latest LocationJournal --template blank
+cd LocationJournal
+npx expo install expo-camera expo-location expo-file-system @react-native-async-storage/async-storage
+npx expo start</code></pre><p>Open the project in VS Code. Replace <code>App.js</code> with the tutorial below. Scan the Expo QR code or launch a simulator.</p><aside><strong>Important:</strong> Test camera and GPS behavior on a real device where possible. Simulators may have simulated location and camera limitations. Always request permission before accessing sensitive device features.</aside></section>
+<section class="panel" id="lesson"><h2>4. Step-by-Step Coding Tutorial</h2><h3>Part A: Camera permission and photo capture</h3><p><code>useCameraPermissions</code> provides the current permission state and a function to request permission. <code>CameraView</code> displays the preview; its ref lets you capture a photo.</p><pre><code>import { CameraView, useCameraPermissions } from 'expo-camera';
+import { useRef, useState } from 'react';
+import { Button, Image, Text, View } from 'react-native';
+
+function CameraExample() {
+  const cameraRef = useRef(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [photo, setPhoto] = useState(null);
+
+  if (!permission) return &lt;Text&gt;Checking camera permission...&lt;/Text&gt;;
+  if (!permission.granted) {
+    return &lt;View&gt;
+      &lt;Text&gt;Camera access is needed to take a journal photo.&lt;/Text&gt;
+      &lt;Button title="Allow camera" onPress={requestPermission} /&gt;
+    &lt;/View&gt;;
+  }
+  async function capture() {
+    const result = await cameraRef.current?.takePictureAsync();
+    if (result?.uri) setPhoto(result.uri);
+  }
+  return &lt;View&gt;
+    &lt;CameraView ref={cameraRef} style={{ height: 260 }} facing="back" /&gt;
+    &lt;Button title="Take Photo" onPress={capture} /&gt;
+    {photo &amp;&amp; &lt;Image source={{ uri: photo }} style={{ height: 180 }} /&gt;}
+  &lt;/View&gt;;
+}</code></pre><h3>Part B: Request GPS location</h3><p>Request <em>foreground</em> location permission only when the student taps a button. Do not collect background location for this assignment.</p><pre><code>import * as Location from 'expo-location';
+
+async function getCoordinates() {
+  const { status } = await Location.requestForegroundPermissionsAsync();
+  if (status !== 'granted') {
+    throw new Error('Location permission was denied.');
+  }
+  const position = await Location.getCurrentPositionAsync({
+    accuracy: Location.Accuracy.Balanced,
+  });
+  return {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+  };
+}</code></pre><h3>Part C: Save journal data locally</h3><p>AsyncStorage stores strings. Convert JavaScript objects into JSON before saving and parse them when loading.</p><pre><code>import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const STORAGE_KEY = '@location_journal_entries';
+
+async function saveEntries(entries) {
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+async function loadEntries() {
+  const raw = await AsyncStorage.getItem(STORAGE_KEY);
+  return raw ? JSON.parse(raw) : [];
+}</code></pre><h3>Part D: Complete working App.js</h3><p>This example combines permission requests, photo capture, GPS lookup, timestamped entries, image persistence, and local storage. The image is copied into the app's document directory so that saved entries do not rely on temporary camera files.</p><pre><code>import React, { useEffect, useRef, useState } from 'react';
+import {
+  Alert, Button, FlatList, Image, SafeAreaView,
+  StyleSheet, Text, TextInput, View,
+} from 'react-native';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as Location from 'expo-location';
+import * as FileSystem from 'expo-file-system';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const KEY = '@location_journal_entries';
+
+export default function App() {
+  const camera = useRef(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [showCamera, setShowCamera] = useState(false);
+  const [photoUri, setPhotoUri] = useState(null);
+  const [coords, setCoords] = useState(null);
+  const [note, setNote] = useState('');
+  const [entries, setEntries] = useState([]);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() =&gt; {
+    AsyncStorage.getItem(KEY)
+      .then(raw =&gt; { if (raw) setEntries(JSON.parse(raw)); })
+      .catch(() =&gt; Alert.alert('Error', 'Could not load journal.'));
+  }, []);
+
+  async function takePhoto() {
+    try {
+      const result = await camera.current?.takePictureAsync();
+      if (result?.uri) {
+        setPhotoUri(result.uri);
+        setShowCamera(false);
+      }
+    } catch {
+      Alert.alert('Camera error', 'Could not take a photo.');
+    }
+  }
+
+  async function readLocation() {
+    setBusy(true);
+    try {
+      const response = await Location.requestForegroundPermissionsAsync();
+      if (response.status !== 'granted') {
+        Alert.alert('Permission denied', 'Location access is optional.');
+        return;
+      }
+      const result = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+      setCoords({
+        latitude: result.coords.latitude,
+        longitude: result.coords.longitude,
+      });
+    } catch {
+      Alert.alert('GPS error', 'Unable to determine location.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function saveJournal() {
+    if (!photoUri || !coords) {
+      Alert.alert('Missing data', 'Capture a photo and retrieve location.');
+      return;
+    }
+    setBusy(true);
+    let storedPhoto = null;
+    try {
+      const id = String(Date.now());
+      // The legacy API is used explicitly for SDKs where the main
+      // FileSystem.copyAsync API has been deprecated.
+      const destination = FileSystem.documentDirectory + id + '.jpg';
+      await FileSystem.copyAsync({ from: photoUri, to: destination });
+      storedPhoto = destination;
+      const entry = {
+        id, note: note.trim(), photoUri: destination,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        timestamp: new Date().toISOString(),
+      };
+      const updated = [entry, ...entries];
+      await AsyncStorage.setItem(KEY, JSON.stringify(updated));
+      setEntries(updated);
+      setPhotoUri(null);
+      setCoords(null);
+      setNote('');
+      Alert.alert('Saved', 'Journal entry saved locally.');
+    } catch {
+      if (storedPhoto) {
+        // Optional cleanup can remove an orphaned file on save failure.
+      }
+      Alert.alert('Save error', 'Could not save journal entry.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    &lt;SafeAreaView style={styles.container}&gt;
+      &lt;Text style={styles.heading}&gt;My Location Journal&lt;/Text&gt;
+      {!permission ? (
+        &lt;Text&gt;Checking camera permission...&lt;/Text&gt;
+      ) : showCamera &amp;&amp; permission.granted ? (
+        &lt;View&gt;
+          &lt;CameraView ref={camera} style={styles.camera} facing="back" /&gt;
+          &lt;Button title="Capture Photo" onPress={takePhoto} /&gt;
+          &lt;Button title="Cancel" onPress={() =&gt; setShowCamera(false)} /&gt;
+        &lt;/View&gt;
+      ) : (
+        &lt;View&gt;
+          &lt;Button title="Open Camera" onPress={async () =&gt; {
+            if (permission.granted) setShowCamera(true);
+            else {
+              const response = await requestPermission();
+              if (response.granted) setShowCamera(true);
+              else Alert.alert('Camera denied', 'Enable camera in device settings.');
+            }
+          }} /&gt;
+          {photoUri &amp;&amp; &lt;Image source={{ uri: photoUri }} style={styles.photo} /&gt;}
+          &lt;Button title="Get Current Location" onPress={readLocation} disabled={busy} /&gt;
+          {coords &amp;&amp; &lt;Text&gt;
+            Latitude: {coords.latitude.toFixed(5)} | Longitude: {coords.longitude.toFixed(5)}
+          &lt;/Text&gt;}
+          &lt;TextInput
+            style={styles.input} placeholder="Journal note" value={note}
+            onChangeText={setNote}
+          /&gt;
+          &lt;Button title="Save Entry" onPress={saveJournal} disabled={busy} /&gt;
+          &lt;Text style={styles.subheading}&gt;Saved Entries&lt;/Text&gt;
+          &lt;FlatList
+            data={entries} keyExtractor={item =&gt; item.id}
+            ListEmptyComponent={&lt;Text&gt;No entries yet.&lt;/Text&gt;}
+            renderItem={({ item }) =&gt; (
+              &lt;View style={styles.entry}&gt;
+                &lt;Image source={{ uri: item.photoUri }} style={styles.thumbnail} /&gt;
+                &lt;Text&gt;{item.note || 'Untitled entry'}&lt;/Text&gt;
+                &lt;Text&gt;{new Date(item.timestamp).toLocaleString()}&lt;/Text&gt;
+                &lt;Text&gt;{item.latitude.toFixed(5)}, {item.longitude.toFixed(5)}&lt;/Text&gt;
+              &lt;/View&gt;
+            )}
+          /&gt;
+        &lt;/View&gt;
+      )}
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, backgroundColor: '#fff' },
+  heading: { fontSize: 26, fontWeight: 'bold', marginBottom: 14 },
+  subheading: { fontSize: 20, fontWeight: 'bold', marginTop: 16 },
+  camera: { height: 260, marginVertical: 10 },
+  photo: { height: 180, marginVertical: 10 },
+  input: { borderWidth: 1, borderColor: '#aaa', padding: 12, marginVertical: 12 },
+  entry: { paddingVertical: 12, borderBottomWidth: 1, borderColor: '#ddd' },
+  thumbnail: { width: 100, height: 80, marginBottom: 6 },
+});</code></pre><aside><strong>Expo SDK compatibility note:</strong> Some SDK versions have changed the FileSystem API. If <code>FileSystem.copyAsync</code> is unavailable or throws a deprecation error, change the import to <code>import * as FileSystem from 'expo-file-system/legacy';</code> for this tutorial, or update to the current <code>File</code>/<code>Directory</code> API using the linked documentation. Test the example with your course's chosen Expo SDK before distributing.</aside><h3>Common troubleshooting</h3><ul><li><strong>Camera preview blank:</strong> Verify permission and test on a physical device.</li><li><strong>Location never returns:</strong> Enable device location services; use simulator mock location if needed.</li><li><strong>Permission denied permanently:</strong> Open the phone's Settings app and enable access for Expo Go or the development build.</li><li><strong>Photo disappears after restart:</strong> Ensure the image is copied from temporary cache to app document storage.</li><li><strong>Package import fails:</strong> Run <code>npx expo install</code> with the package names and restart Metro.</li></ul></section>
+<section class="panel" id="lab"><h2>5. In-Class Lab: Photo + GPS Check-In</h2><p><strong>Estimated time:</strong> 45–60 minutes. Work individually or in pairs.</p><ol><li>Create the Expo project and install dependencies.</li><li>Display a camera preview after the user grants permission.</li><li>Capture a photo and show a thumbnail.</li><li>Request foreground location on button press and display latitude/longitude.</li><li>Show a clear message when permission is denied.</li><li>Demonstrate the app on a physical device or supported simulator.</li></ol><p><strong>Lab deliverable:</strong> A screenshot of the app showing a captured photo and coordinates, plus a short explanation of how permission denial is handled. Students may blur or omit precise coordinates in screenshots.</p></section>
+<section class="panel" id="discussion"><h2>6. Discussion Board: Mobile Privacy and User Trust</h2><p><strong>Prompt:</strong> A photo-journal app wants access to your camera and location. When should it ask for permission, and what information should it provide before requesting access? Compare two real-world apps that use camera or GPS permissions. Discuss whether they collect only the data needed for their features.</p><p><strong>Initial post:</strong> 200–300 words. Cite at least one course resource and include one practical privacy recommendation. <strong>Peer replies:</strong> Respond substantively to two classmates (75+ words each), considering consent, data retention, or user control.</p></section>
+<section class="panel" id="assignment"><h2>7. Homework Assignment: My Location Journal</h2><p><strong>Goal:</strong> Create a React Native / Expo mobile application that records meaningful photo-based journal entries with GPS coordinates and timestamps.</p><h3>Functional requirements</h3><ol><li>Create a clear home screen titled <strong>My Location Journal</strong>.</li><li>Allow users to open the camera and capture a photograph.</li><li>Ask for camera and foreground-location permissions at appropriate moments.</li><li>Retrieve and display the current latitude and longitude.</li><li>Provide a text field for a journal note.</li><li>Save each entry with photo, coordinates, note, and timestamp.</li><li>Display a scrollable list of saved entries.</li><li>Persist saved entries and photos after the app is closed and reopened.</li><li>Display helpful error messages for denied permissions and failed operations.</li></ol><h3>Submission instructions</h3><ul><li>Submit a GitHub repository link containing source code and a <code>README.md</code> with setup/run instructions.</li><li>Include at least three screenshots: home screen, permission/capture workflow, and saved journal list.</li><li>Include a 2–4 minute demonstration video showing an entry being saved and still present after reopening the app.</li><li>Write a 150–250 word reflection describing challenges, permission handling, and privacy decisions.</li><li>Do not publish real-time precise location coordinates, private addresses, or sensitive photos in your public repository or demonstration.</li></ul><p><strong>Optional extra credit (+5):</strong> Add an option to delete a saved entry and its stored photo after a confirmation prompt.</p></section>
+<section class="panel" id="rubric"><h2>8. Grading Rubric (100 Points)</h2><table><thead><tr><th>Criterion</th><th>Points</th></tr></thead><tbody><tr><td>Project setup, structure, and functional home screen</td><td>10</td></tr><tr><td>Camera permission, preview, and photo capture</td><td>20</td></tr><tr><td>GPS permission and coordinate display</td><td>15</td></tr><tr><td>Journal notes, timestamps, and entry list</td><td>15</td></tr><tr><td>Persistent storage of entries and image files</td><td>20</td></tr><tr><td>Error handling, usability, and privacy</td><td>10</td></tr><tr><td>README, screenshots, demo video, and reflection</td><td>10</td></tr><tr><th>Total</th><th>100</th></tr></tbody></table></section>
+<section class="panel"><h2>9. Instructor Notes and Next Week</h2><p><strong>Suggested pacing:</strong> 15 minutes permissions and privacy, 20 minutes camera, 20 minutes GPS, 20 minutes persistence, and 45–60 minutes lab/demo. The homework can be completed outside class.</p><p><strong>Next module:</strong> Push Notifications, Background Tasks, and Mobile App Deployment. Students can extend the journal app with a reminder to create a new entry.</p></section></main><footer>Mobile Development • React Native + Expo • Student Learning Module</footer></body></html>
